@@ -1,0 +1,17 @@
+Language Selector sets a different language for any app, the same way the system "App languages" screen does, but for every app, including ones that don't list themselves there.
+
+<b>Requirements</b>
+- Android 15 or newer
+- Root (KernelSU or Magisk) or Shizuku. KernelSU shows no prompt: add the app to the KernelSU allowlist manually.
+
+<b>Features</b>
+- Per-app language for any installed app, with search and search history
+- Restart button: force-stops and relaunches the app so the new language applies
+- Pinned languages (long-press to pin), Russian and English pinned by default
+- Quick Settings tile that cycles the foreground app through pinned languages
+- UI in English, Russian, Japanese, Portuguese (Brazil) and Chinese (Simplified)
+- Themed (monochrome) icon
+
+Language Selector does NOT translate apps. It only tells an app which locale to use; if the app has no resources for that language, nothing changes. Changing the language of system apps may cause unexpected behavior and is NOT RECOMMENDED.
+
+Fork of VegaBobo/Language-Selector with its own package id (dev.vaas1k.languageselector), maintained at github.com/vaas1k/Language-Selector.

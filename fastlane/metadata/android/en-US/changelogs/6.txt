@@ -1,0 +1,9 @@
+- Smooth app list scrolling
+- Works with root (KernelSU, Magisk) or Shizuku, reconnects automatically
+- QS tile fixes
+- Restart button to relaunch the app in the new language
+- Russian and English pinned by default
+- Russian UI
+- Themed (monochrome) icon
+- Android 15+ only
+- New package id dev.vaas1k.languageselector: install fresh, it does not update the upstream app
