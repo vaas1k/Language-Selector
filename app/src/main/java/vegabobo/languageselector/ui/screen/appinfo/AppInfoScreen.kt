@@ -1,6 +1,5 @@
 package vegabobo.languageselector.ui.screen.appinfo
 
-import android.graphics.BitmapFactory
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
@@ -16,7 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
-import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -27,13 +26,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.drawable.toBitmap
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import vegabobo.languageselector.R
 import vegabobo.languageselector.ui.components.BackButton
 import vegabobo.languageselector.ui.components.LocaleItemList
@@ -51,18 +51,19 @@ fun AppInfoScreen(
 ) {
     val uiState by appInfoVm.uiState.collectAsState()
     val ctx = LocalContext.current
+    val res = LocalResources.current
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
     fun pinToast(locale: String) {
         val pinTxt =
-            ctx.resources.getString(R.string.pinned_ok).format(locale)
+            res.getString(R.string.pinned_ok).format(locale)
         Toast.makeText(ctx, pinTxt, Toast.LENGTH_SHORT).show()
     }
 
     fun unpinToast(locale: String) {
         val pinTxt =
-            ctx.resources.getString(R.string.unpinned).format(locale)
+            res.getString(R.string.unpinned).format(locale)
         Toast.makeText(ctx, pinTxt, Toast.LENGTH_SHORT).show()
     }
 
@@ -91,10 +92,8 @@ fun AppInfoScreen(
                 ) {
                     Image(
                         modifier = Modifier.size(84.dp),
-                        bitmap = uiState.appIcon?.toBitmap()?.asImageBitmap()
-                            ?: BitmapFactory.decodeResource(
-                                ctx.resources, R.drawable.icon_placeholder
-                            ).asImageBitmap(),
+                        bitmap = uiState.appIcon
+                            ?: ImageBitmap.imageResource(R.drawable.icon_placeholder),
                         contentDescription = "App icon"
                     )
                     Column(
@@ -129,9 +128,9 @@ fun AppInfoScreen(
                     )
                     QuickTextButton(
                         modifier = Modifier.weight(1f),
-                        onClick = { appInfoVm.onClickForceClose() },
-                        icon = Icons.Outlined.Close,
-                        text = stringResource(R.string.close)
+                        onClick = { appInfoVm.onClickRestart() },
+                        icon = Icons.Outlined.Refresh,
+                        text = stringResource(R.string.restart)
                     )
                     QuickTextButton(
                         modifier = Modifier.weight(1f),

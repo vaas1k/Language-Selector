@@ -17,7 +17,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,9 +32,11 @@ import vegabobo.languageselector.R
 import vegabobo.languageselector.ui.components.BackButton
 import vegabobo.languageselector.ui.components.Title
 import vegabobo.languageselector.ui.screen.BaseScreen
+import vegabobo.languageselector.service.UserServiceProvider
+import vegabobo.languageselector.ui.screen.main.OperationMode
 import vegabobo.languageselector.ui.screen.main.getAppIcon
 import com.mikepenz.aboutlibraries.Libs
-import com.mikepenz.aboutlibraries.util.withContext
+import com.mikepenz.aboutlibraries.util.withJson
 import vegabobo.languageselector.BuildConfig
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,11 +44,12 @@ import vegabobo.languageselector.BuildConfig
 fun AboutScreen(
     navigateBack: () -> Unit
 ) {
-    val libs = remember { mutableStateOf<Libs?>(null) }
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
-    libs.value = Libs.Builder().withContext(context).build()
-    val libraries = libs.value!!.libraries
+    val libraries = remember { Libs.Builder().withJson(context, R.raw.aboutlibraries).build().libraries }
+    val appIcon = remember {
+        context.packageManager.getAppIcon(context.applicationInfo).toBitmap().asImageBitmap()
+    }
 
     BaseScreen(
         title = stringResource(R.string.about),
@@ -66,9 +68,7 @@ fun AboutScreen(
                 ) {
                     Image(
                         modifier = Modifier.size(96.dp),
-                        bitmap = context.packageManager
-                            .getAppIcon(context.applicationInfo)
-                            .toBitmap().asImageBitmap(),
+                        bitmap = appIcon,
                         contentDescription = "App icon"
                     )
                     Text(text = stringResource(R.string.app_name), fontSize = 22.sp)
@@ -78,6 +78,13 @@ fun AboutScreen(
                             BuildConfig.VERSION_CODE
                         )
                     )
+                    Text(
+                        when {
+                            !UserServiceProvider.isConnected() -> stringResource(R.string.mode_none)
+                            UserServiceProvider.opMode == OperationMode.ROOT -> stringResource(R.string.mode_root)
+                            else -> stringResource(R.string.mode_shizuku, UserServiceProvider.uid)
+                        }
+                    )
                 }
             }
             item {
@@ -85,6 +92,12 @@ fun AboutScreen(
                 PreferenceItem(
                     title = stringResource(R.string.ghrepo),
                     description = stringResource(R.string.view_source)
+                ) {
+                    uriHandler.openUri("https://github.com/vaas1k/Language-Selector")
+                }
+                PreferenceItem(
+                    title = stringResource(R.string.original_project),
+                    description = "github.com/VegaBobo/Language-Selector"
                 ) {
                     uriHandler.openUri("https://github.com/VegaBobo/Language-Selector")
                 }

@@ -10,9 +10,9 @@
     <string name="show_system_apps">Show system apps</string>
     <string name="settings">Settings</string>
     <string name="open">Open</string>
-    <string name="close">Close</string>
+    <string name="restart">Restart</string>
     <string name="permissions_required">Permissions required</string>
-    <string name="shizuku_required">This app requires Shizuku, please install and start Shizuku, after granting Shizuku permissions to this app, you can proceed.</string>
+    <string name="shizuku_required">This app needs root or Shizuku. Grant root in your root manager, or install and start Shizuku, then tap Proceed to request Shizuku permission.</string>
     <string name="proceed">Proceed</string>
     <string name="pinned_ok">%1$s pinned</string>
     <string name="unpinned">%1$s unpinned</string>
@@ -22,11 +22,27 @@
     <string name="app">Application</string>
     <string name="ghrepo">GitHub repo</string>
     <string name="view_source">View source code</string>
-    <string name="loading">Loading…</string>
+    <string name="original_project">Original project by VegaBobo</string>
     <string name="unavailable">Unavailable</string>
-    <string name="warning">Warning</string>
-    <string name="warning_system_apps">Selecting language from system apps is not recommended, are you sure?</string>
-    <string name="cancel">Cancel</string>
 
     <string name="search">Search apps</string>
+    <string name="own_language">This app\'s language</string>
+    <string name="label_system_app">System App</string>
+    <string name="label_user_app">User App</string>
+    <string name="label_modified">Modified</string>
+    <string name="filter_show_system">Show System</string>
+    <string name="filter_show_modified">Show Modified</string>
+    <string name="history">History</string>
+    <string name="clear">Clear</string>
+    <string name="search_hint">Type something to search</string>
+    <string name="moved_up">Modified app has been moved up</string>
+    <string name="moved_down">Unmodified has been moved down</string>
+    <string name="navigate">Navigate</string>
+    <string name="status_connecting">Connecting…</string>
+    <string name="status_root">Root access granted ✓</string>
+    <string name="status_shizuku">Shizuku connected ✓</string>
+    <string name="status_loading_apps">Loading apps…</string>
+    <string name="mode_root">Mode: root ✓</string>
+    <string name="mode_shizuku">Mode: Shizuku ✓ (uid %1$d)</string>
+    <string name="mode_none">Mode: not connected</string>
 </resources>

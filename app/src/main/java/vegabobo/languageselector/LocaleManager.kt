@@ -7,28 +7,12 @@ import java.util.Locale
 
 class LocaleManager {
 
-    val localeList = ArrayList<LocaleRegion>()
-
-    init {
-        val locales = Locale.getAvailableLocales()
-        val localeListMap = mutableMapOf<String, LocaleRegion>()
-        for (locale in locales) {
-            val languageName = locale.capDisplayName()
-            val languageTag = locale.toLanguageTag()
-            val language = locale.getDisplayLanguage(locale).replaceFirstChar { it.uppercaseChar() }
-
-            val existingLocale = localeListMap[language]
-            if (existingLocale != null) {
-                val singleLocale = SingleLocale(languageName, languageTag)
-                existingLocale.locales.add(singleLocale)
-                continue
-            }
-
-            localeListMap[language] =
-                LocaleRegion(language, arrayListOf())
+    val localeList: List<LocaleRegion> = Locale.getAvailableLocales()
+        .filter { it.language.isNotEmpty() }
+        .groupBy { it.getDisplayLanguage(it).replaceFirstChar { c -> c.uppercaseChar() } }
+        .map { (language, locales) ->
+            LocaleRegion(language, locales.map { SingleLocale(it.capDisplayName(), it.toLanguageTag()) })
         }
-        localeList.addAll(localeListMap.values)
-        localeList.sortBy { it.language }
-    }
+        .sortedBy { it.language }
 
 }
