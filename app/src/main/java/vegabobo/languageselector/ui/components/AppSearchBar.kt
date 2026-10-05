@@ -1,5 +1,6 @@
 package vegabobo.languageselector.ui.components
 
+import vegabobo.languageselector.R
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -20,9 +22,14 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -46,15 +53,19 @@ fun AppSearchBar(
     selectedLabels: List<AppLabels>,
     onSelectedLabelsChange: (AppLabels) -> Unit,
     onClickApp: (AppInfo) -> Unit,
+    cachedIcon: (String) -> ImageBitmap?,
+    loadIcon: suspend (String) -> ImageBitmap,
     onClickClear: () -> Unit,
     actions: @Composable RowScope.() -> Unit,
 ) {
+    val focusRequester = remember { FocusRequester() }
     SearchBar(
         modifier = Modifier
             .semantics { isTraversalGroup = true }
             .then(modifier),
         inputField = {
             SearchBarDefaults.InputField(
+                modifier = Modifier.focusRequester(focusRequester),
                 onSearch = { onUpdatedValue(it) },
                 expanded = isExpanded,
                 onExpandedChange = { onExpandedChange(it) },
@@ -75,6 +86,9 @@ fun AppSearchBar(
         expanded = isExpanded,
         onExpandedChange = { onExpandedChange(it) },
     ) {
+        val results = remember(apps, query, selectedLabels) {
+            apps.filterNot { filter(query, it, selectedLabels) }
+        }
         LazyColumn {
             if (query.isNotBlank()) {
                 item {
@@ -89,7 +103,7 @@ fun AppSearchBar(
                             .horizontalScroll(rememberScrollState())
                     ) {
                         FilterLabel(
-                            title = "Show System",
+                            title = stringResource(R.string.filter_show_system),
                             onClick = {
                                 onSelectedLabelsChange(AppLabels.SYSTEM_APP)
                             },
@@ -97,17 +111,14 @@ fun AppSearchBar(
                         )
                         Spacer(Modifier.padding(8.dp))
                         FilterLabel(
-                            title = "Show Modified",
+                            title = stringResource(R.string.filter_show_modified),
                             onClick = { onSelectedLabelsChange(AppLabels.MODIFIED) },
                             isSelected = selectedLabels.contains(AppLabels.MODIFIED)
                         )
                     }
                 }
 
-                items(apps.size) {
-                    val app = apps[it]
-                    if (filter(query, app, selectedLabels))
-                        return@items
+                items(results, key = { it.pkg }) { app ->
                     AppListItem(
                         modifier = Modifier.padding(
                             start = 23.dp,
@@ -116,6 +127,8 @@ fun AppSearchBar(
                             bottom = 4.dp
                         ),
                         app = app,
+                        cachedIcon = cachedIcon,
+                        loadIcon = loadIcon,
                         onClickApp = { onClickApp(app) }
                     )
                 }
@@ -127,7 +140,7 @@ fun AppSearchBar(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "History".uppercase(),
+                            text = stringResource(R.string.history).uppercase(),
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
                             letterSpacing = 1.sp,
@@ -138,19 +151,18 @@ fun AppSearchBar(
                                 .padding(top = 8.dp)
                         )
                         Spacer(modifier = Modifier.weight(1f))
-                        TextButton(onClick = { onClickClear() }) {
+                        TextButton(onClick = { onClickClear(); focusRequester.requestFocus() }) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Center
                             ) {
-                                Text(text = "Clear")
+                                Text(text = stringResource(R.string.clear))
                             }
                         }
                         Spacer(modifier = Modifier.padding(6.dp))
                     }
                 }
-                items(history.size) {
-                    val app = history[it]
+                items(history, key = { it.pkg }) { app ->
                     AppListItem(
                         modifier = Modifier.padding(
                             start = 23.dp,
@@ -159,6 +171,8 @@ fun AppSearchBar(
                             bottom = 4.dp
                         ),
                         app = app,
+                        cachedIcon = cachedIcon,
+                        loadIcon = loadIcon,
                         onClickApp = { onClickApp(app) }
                     )
                 }
@@ -175,7 +189,7 @@ fun AppSearchBar(
                             .fillMaxWidth()
                             .padding(10.dp)
                             .alpha(0.4f),
-                        text = "Type something to search",
+                        text = stringResource(R.string.search_hint),
                         textAlign = TextAlign.Center
                     )
                 }

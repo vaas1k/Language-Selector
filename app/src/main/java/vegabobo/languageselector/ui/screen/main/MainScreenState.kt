@@ -3,7 +3,6 @@ package vegabobo.languageselector.ui.screen.main
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
-import androidx.compose.runtime.mutableStateListOf
 import vegabobo.languageselector.dao.AppInfoEntity
 
 enum class OperationMode {
@@ -15,19 +14,20 @@ enum class SnackBarDisplay {
 }
 
 data class MainScreenState(
-    val listOfApps: MutableList<AppInfo> = mutableStateListOf(),
-    val history: MutableList<AppInfo> = mutableStateListOf(),
+    val listOfApps: List<AppInfo> = emptyList(),
+    val homeApps: List<AppInfo> = emptyList(),
+    val history: List<AppInfo> = emptyList(),
     val operationMode: OperationMode = OperationMode.NONE,
     val isDropdownVisible: Boolean = false,
-    val isAboutDialogVisible: Boolean = false,
     val isLoading: Boolean = true,
+    val isConnected: Boolean = false,
     val isShowSystemAppsHome: Boolean = false,
     val snackBarDisplay: SnackBarDisplay = SnackBarDisplay.NONE,
 
     /* Search bar */
     val isExpanded: Boolean = false,
     val searchTextFieldValue: String = "",
-    val selectLabels: MutableList<AppLabels> = mutableStateListOf()
+    val selectLabels: List<AppLabels> = emptyList()
 )
 
 enum class AppLabels {
@@ -35,7 +35,6 @@ enum class AppLabels {
 }
 
 data class AppInfo(
-    val icon: Drawable,
     val name: String,
     val pkg: String,
     val labels: List<AppLabels> = emptyList()
@@ -55,3 +54,6 @@ fun PackageManager.getLabel(applicationInfo: ApplicationInfo): String {
 fun PackageManager.getAppIcon(applicationInfo: ApplicationInfo): Drawable {
     return this.getApplicationIcon(applicationInfo)
 }
+
+fun List<AppInfo>.homeFilter(showSystemApps: Boolean) =
+    filter { showSystemApps || !it.isSystemApp() || it.isModified() }

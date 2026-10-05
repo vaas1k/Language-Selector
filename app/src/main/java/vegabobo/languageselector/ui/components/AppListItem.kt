@@ -1,5 +1,6 @@
 package vegabobo.languageselector.ui.components
 
+import vegabobo.languageselector.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,33 +15,46 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.drawable.toBitmap
 import vegabobo.languageselector.ui.screen.main.AppInfo
 
 @Composable
 fun AppListItem(
     modifier: Modifier = Modifier,
     app: AppInfo,
+    cachedIcon: (String) -> ImageBitmap?,
+    loadIcon: suspend (String) -> ImageBitmap,
     onClickApp: (String) -> Unit
 ) {
+    var icon by remember(app.pkg) { mutableStateOf(cachedIcon(app.pkg)) }
+    LaunchedEffect(app.pkg) { if (icon == null) icon = loadIcon(app.pkg) }
     Row(
         modifier = Modifier
             .clickable { onClickApp(app.pkg) }
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            modifier = Modifier.size(32.dp),
-            bitmap = app.icon.toBitmap().asImageBitmap(),
-            contentDescription = "app icon"
-        )
+        val bitmap = icon
+        if (bitmap != null)
+            Image(
+                modifier = Modifier.size(32.dp),
+                bitmap = bitmap,
+                contentDescription = null
+            )
+        else
+            Spacer(Modifier.size(32.dp))
         Spacer(modifier = Modifier.padding(8.dp))
         Column(
             modifier = Modifier.weight(1f),
@@ -49,9 +63,9 @@ fun AppListItem(
             Text(text = app.name, fontSize = 18.sp, fontWeight = FontWeight.Medium, maxLines = 1)
             Text(text = app.pkg, fontSize = 12.sp, maxLines = 1)
             Row {
-                TextLabel(text = if (app.isSystemApp()) "System App" else "User App")
+                TextLabel(text = stringResource(if (app.isSystemApp()) R.string.label_system_app else R.string.label_user_app))
                 if (app.isModified())
-                    TextLabel(text = "Modified")
+                    TextLabel(text = stringResource(R.string.label_modified))
             }
         }
     }

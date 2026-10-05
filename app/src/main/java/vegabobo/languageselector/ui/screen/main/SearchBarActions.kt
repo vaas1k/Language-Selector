@@ -23,7 +23,8 @@ fun SearchBarActions(
     onClickToggleDropdown: () -> Unit,
     onToggleDropdown: () -> Unit,
     onClickToggleSystemApps: () -> Unit,
-    onClickAbout: () -> Unit
+    onClickAbout: () -> Unit,
+    onClickOwnLanguage: () -> Unit
 ) {
     Box(
         modifier = Modifier.wrapContentSize(Alignment.Center)
@@ -46,6 +47,10 @@ fun SearchBarActions(
                     )
                 },
                 onClick = { onClickToggleSystemApps() }
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.own_language)) },
+                onClick = { onClickOwnLanguage(); onClickToggleDropdown() }
             )
             DropdownMenuItem(
                 text = { Text(stringResource(R.string.about)) },
