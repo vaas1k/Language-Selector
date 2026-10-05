@@ -1,6 +1,7 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.com.android.application)
-    alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.com.google.dagger.hilt)
     alias(libs.plugins.com.mikepenz.aboutlibraries)
     alias(libs.plugins.compose.compiler)
@@ -9,24 +10,30 @@ plugins {
 
 android {
     namespace = "vegabobo.languageselector"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
-        applicationId = "vegabobo.languageselector"
-        minSdk = 33
-        targetSdk = 35
-        versionCode = 5
-        versionName = "1.04"
+        applicationId = "dev.vaas1k.languageselector"
+        minSdk = 35
+        targetSdk = 36
+        versionCode = 6
+        versionName = "1.05"
+    }
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
+    val keystoreProps = rootProject.file("keystore.properties")
+    if (keystoreProps.exists()) {
+        val props = Properties().apply { keystoreProps.inputStream().use { load(it) } }
+        signingConfigs.create("release") {
+            storeFile = file(props.getProperty("storeFile"))
+            storePassword = props.getProperty("storePassword")
+            keyAlias = props.getProperty("keyAlias")
+            keyPassword = props.getProperty("keyPassword")
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -39,26 +46,30 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    kotlinOptions {
-        jvmTarget = "21"
+    testOptions {
+        unitTests.isReturnDefaultValues = true
     }
     buildFeatures {
         buildConfig = true
         compose = true
         aidl = true
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
     }
 }
 
 aboutLibraries {
-    excludeFields = arrayOf("generated")
+    export {
+        excludeFields.add("generated")
+    }
 }
 
 dependencies {
+    testImplementation(libs.junit)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
@@ -75,7 +86,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.material3)
 
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

@@ -7,6 +7,7 @@ import android.os.IInterface;
 public interface IActivityManager extends IInterface {
 
     void forceStopPackage(String packageName, int userId);
+    int getCurrentUserId();
 
     abstract class Stub extends Binder implements IActivityManager {
 
