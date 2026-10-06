@@ -1,1 +1,1 @@
-Per-app languages for any app on Android 15+, with root or Shizuku
+Per-app languages for any app on Android 13+, with root or Shizuku

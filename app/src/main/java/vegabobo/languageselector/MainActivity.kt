@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
 import rikka.shizuku.Shizuku
 import vegabobo.languageselector.service.UserService
@@ -35,6 +36,7 @@ class MainActivity : ComponentActivity(), Shizuku.OnRequestPermissionResultListe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             LanguageSelector { Navigation() }
         }

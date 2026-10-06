@@ -1,1 +1,2 @@
-- KernelSU note in the guide: re-enable root after reinstalling the app
+- Android 13 and 14 supported again
+- Guide: KernelSU and Shizuku forget the grant after a reinstall, enable it again
