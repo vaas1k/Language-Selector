@@ -22,6 +22,7 @@
     <string name="ghrepo">Репозиторий GitHub</string>
     <string name="view_source">Исходный код</string>
     <string name="original_project">Оригинальный проект VegaBobo</string>
+    <string name="ui_credit">Дизайн интерфейса: Morphe Manager</string>
     <string name="unavailable">Недоступно</string>
     <string name="search">Поиск приложений</string>
     <string name="own_language">Язык этого приложения</string>

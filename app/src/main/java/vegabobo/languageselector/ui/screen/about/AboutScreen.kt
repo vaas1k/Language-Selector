@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -107,6 +108,13 @@ fun AboutScreen(
                 title = stringResource(R.string.original_project),
                 description = "github.com/VegaBobo/Language-Selector"
             ) { uriHandler.openUri("https://github.com/VegaBobo/Language-Selector") }
+        }
+        item {
+            LinkItem(
+                icon = Icons.Outlined.Palette,
+                title = stringResource(R.string.ui_credit),
+                description = "github.com/MorpheApp/morphe-manager"
+            ) { uriHandler.openUri("https://github.com/MorpheApp/morphe-manager") }
         }
         item { Title(stringResource(R.string.deps_libs)) }
         item {

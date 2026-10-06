@@ -23,6 +23,7 @@
     <string name="ghrepo">Github 仓库</string>
     <string name="view_source">查看源码</string>
     <string name="original_project">原项目作者 VegaBobo</string>
+    <string name="ui_credit">界面设计：Morphe Manager</string>
     <string name="unavailable">不可用</string>
     <string name="search">搜索</string>
     <string name="own_language">本应用的语言</string>
