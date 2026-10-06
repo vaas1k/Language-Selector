@@ -45,6 +45,7 @@
     <string name="mode_shizuku">模式：Shizuku ✓ (uid %1$d)</string>
     <string name="mode_none">模式：未连接</string>
     <string name="scroll_to_top">回到顶部</string>
+    <string name="back">返回</string>
     <string name="search_languages">搜索语言</string>
     <string name="no_languages_found">未找到语言</string>
 </resources>

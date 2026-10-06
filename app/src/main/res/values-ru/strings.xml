@@ -44,6 +44,7 @@
     <string name="mode_shizuku">Режим: Shizuku ✓ (uid %1$d)</string>
     <string name="mode_none">Режим: не подключено</string>
     <string name="scroll_to_top">Наверх</string>
+    <string name="back">Назад</string>
     <string name="search_languages">Поиск языков</string>
     <string name="no_languages_found">Языки не найдены</string>
 </resources>

@@ -44,7 +44,7 @@ class AppInfoVm @Inject constructor(
 
     lateinit var appInfo: ApplicationInfo
 
-    private val searchIndex by lazy { localeManager.localeList.toSearchIndex(Locale.getDefault()) }
+    private lateinit var searchIndex: Lazy<List<LocaleSearchEntry>>
 
     fun initFromAppId(appId: String) {
         appInfo =
@@ -71,11 +71,12 @@ class AppInfoVm @Inject constructor(
         }
 
         _uiState.update { it.copy(listOfAllLanguages = localeManager.localeList) }
-        viewModelScope.launch(Dispatchers.Default) { searchIndex }
+        searchIndex = lazy { localeManager.localeList.toSearchIndex(Locale.getDefault()) }
+        viewModelScope.launch(Dispatchers.Default) { searchIndex.value }
     }
 
     fun onSearchQueryChange(query: String) {
-        _uiState.update { it.copy(searchQuery = query, searchResults = searchIndex.search(query)) }
+        _uiState.update { it.copy(searchQuery = query, searchResults = searchIndex.value.search(query)) }
     }
 
     fun updateCurrentLanguageState() {

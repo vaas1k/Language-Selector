@@ -25,9 +25,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.util.withJson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import vegabobo.languageselector.BuildConfig
 import vegabobo.languageselector.R
 import vegabobo.languageselector.service.UserServiceProvider
@@ -58,8 +63,10 @@ fun AboutScreen(
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     val libraries = remember { Libs.Builder().withJson(context, R.raw.aboutlibraries).build().libraries }
-    val appIcon = remember {
-        context.packageManager.getAppIcon(context.applicationInfo).toBitmap().asImageBitmap()
+    val appIcon by produceState<ImageBitmap?>(null) {
+        value = withContext(Dispatchers.IO) {
+            context.packageManager.getAppIcon(context.applicationInfo).toBitmap().asImageBitmap()
+        }
     }
     val listState = rememberLazyListState()
     val background = MaterialTheme.colorScheme.background

@@ -122,24 +122,27 @@ fun LeadingBox(content: @Composable () -> Unit) {
     ) { content() }
 }
 
-fun Modifier.edgeFade(state: LazyListState, color: Color, top: Dp = 0.dp): Modifier =
-    drawWithContent {
+fun Modifier.edgeFade(state: LazyListState, color: Color, top: Dp = 0.dp): Modifier {
+    val fadeDown = listOf(color, Color.Transparent)
+    val fadeUp = listOf(Color.Transparent, color)
+    return drawWithContent {
         drawContent()
         val h = Ui.EdgeFade.toPx()
         val t = top.toPx()
         if (state.canScrollBackward)
             drawRect(
-                Brush.verticalGradient(listOf(color, Color.Transparent), t, t + h),
+                Brush.verticalGradient(fadeDown, t, t + h),
                 Offset(0f, t),
                 Size(size.width, h)
             )
         if (state.canScrollForward)
             drawRect(
-                Brush.verticalGradient(listOf(Color.Transparent, color), size.height - h, size.height),
+                Brush.verticalGradient(fadeUp, size.height - h, size.height),
                 Offset(0f, size.height - h),
                 Size(size.width, h)
             )
     }
+}
 
 @Composable
 fun ScrollToTopButton(state: LazyListState, modifier: Modifier = Modifier, afterItems: Int = 8) {

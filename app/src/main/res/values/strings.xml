@@ -46,6 +46,7 @@
     <string name="mode_shizuku">Mode: Shizuku ✓ (uid %1$d)</string>
     <string name="mode_none">Mode: not connected</string>
     <string name="scroll_to_top">Scroll to top</string>
+    <string name="back">Back</string>
     <string name="search_languages">Search languages</string>
     <string name="no_languages_found">No languages found</string>
 </resources>

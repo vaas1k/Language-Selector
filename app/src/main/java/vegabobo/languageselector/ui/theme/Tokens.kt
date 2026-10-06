@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 Morphe.
+ * https://github.com/MorpheApp/morphe-manager
+ *
+ * Based on Morphe Manager (GPLv3), app/src/main/java/app/morphe/manager/ui/screen/shared/Animations.kt
+ */
+
 package vegabobo.languageselector.ui.theme
 
 import androidx.compose.animation.EnterTransition
