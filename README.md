@@ -59,6 +59,7 @@ Shizuku is not needed in this mode.
 4. Open Language Selector, tap **Proceed**, then **Allow** in the Shizuku dialog. The loading screen says "Shizuku connected".
 
 In this mode Shizuku stops on every reboot: start it again from the Shizuku app (step 3) before using Language Selector or its tile.
+Shizuku also forgets the permission when Language Selector is reinstalled: tap Proceed and Allow again.
 
 The Quick Settings tile works in both modes and cycles through your pinned languages.
 
