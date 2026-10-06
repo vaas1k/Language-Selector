@@ -5,11 +5,13 @@ Language Selector sets a different language for any app, the same way the system
 - Root (KernelSU or Magisk) or Shizuku. KernelSU shows no prompt: add the app to the KernelSU allowlist manually.
 
 <b>Features</b>
-- Per-app language for any installed app, with search and search history
-- Restart button: force-stops and relaunches the app so the new language applies
+- Per-app language for any installed app; apps with a changed language are marked and listed first
+- App search by name or package, with history and System/Modified filters
+- Pinned, user and all languages; each language opens its list of regions; language search by name or tag
+- Open, Restart (force-stops and relaunches the app so the new language applies) and Settings buttons
 - Pinned languages (long-press to pin), Russian and English pinned by default
 - Quick Settings tile that cycles the foreground app through pinned languages
-- UI in English, Russian, Japanese, Portuguese (Brazil) and Chinese (Simplified)
+- UI in English, Russian and Chinese (Simplified)
 - Themed (monochrome) icon
 
 Language Selector does NOT translate apps. It only tells an app which locale to use; if the app has no resources for that language, nothing changes. Changing the language of system apps may cause unexpected behavior and is NOT RECOMMENDED.

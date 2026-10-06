@@ -9,6 +9,8 @@ Set a different language for any app on Android 13+, the same way the system "Ap
 <img src="docs/screenshots/en/2-app.png" alt="App language" width="200"/>
 <img src="docs/screenshots/en/3-menu.png" alt="Menu" width="200"/>
 <img src="docs/screenshots/en/4-search.png" alt="Search" width="200"/>
+<img src="docs/screenshots/en/5-regions.png" alt="Language search" width="200"/>
+<img src="docs/screenshots/en/6-about.png" alt="About" width="200"/>
 </div>
 
 ### How it works
@@ -32,7 +34,6 @@ Language Selector is a front end for that one system call:
 - **GitHub Releases.** Download `app-release.apk` from [the latest release](https://github.com/vaas1k/Language-Selector/releases/latest). Each release has `SHA256SUMS` and a VirusTotal link. Signing certificate SHA-256, check with `apksigner verify --print-certs app-release.apk`:
   `D0:8A:A0:A2:9B:A8:DB:44:E9:97:9A:75:1A:F2:1F:92:A3:38:19:55:DB:5E:69:F2:7E:EF:34:CA:83:CC:01:87`
 - **Obtainium.** In [Obtainium](https://github.com/ImranR98/Obtainium) add `https://github.com/vaas1k/Language-Selector` as an app source; updates follow release tags.
-- **IzzyOnDroid.** Coming after the first release in the [IzzyOnDroid repo](https://apt.izzysoft.de/fdroid/), installable with Droid-ify or Neo Store.
 
 You can also [build it yourself](#building). The package id is `dev.vaas1k.languageselector`, so it installs next to the upstream app, not over it.
 
@@ -66,15 +67,18 @@ The Quick Settings tile works in both modes and cycles through your pinned langu
 ### Usage
 
 1. Open the app. It connects with root or Shizuku as described in [Setup](#setup).
-2. Pick an app (use the search bar; recent searches are remembered, ⋮ → **Show system apps** lists system apps too).
-3. Pick a language. **Pinned** and **User languages** are at the top, then **All languages**.
-4. If the app still shows the old language, tap **Restart**: it force-stops and relaunches the app.
+2. Pick an app. Apps with a changed language are marked **Modified** and listed first. The search bar finds apps by name or package; before you type it shows recently opened apps (**History**), and the **Show System** / **Show Modified** chips filter the results. ⋮ → **Show system apps** adds system apps to the main list.
+3. The app screen shows the current language and three buttons: **Open** launches the app, **Restart** force-stops and relaunches it, **Settings** opens its system App info page.
+4. Pick a language. **Pinned** comes first, then **User languages** (**System default** and the languages from your system settings), then **All languages**. Tapping a language in All languages opens its regions: the plain language first, then its main region, then the rest by name. **Search languages** finds a language or region by its own name, its name in the UI language or its tag (`ru-RU`). The current language has a check mark.
+5. If the app still shows the old language, tap **Restart**.
 
 **Pinning.** Long-press a language to pin or unpin it. Russian (Russia) and English (United States) are pinned by default.
 
 **Quick Settings tile.** Add the "Language Selector" tile. Tapping it cycles the foreground app through your pinned languages. With no pinned languages the tile shows Unavailable; system apps are skipped.
 
-**This app's language.** ⋮ → **This app's language** opens the system per-app language screen for Language Selector itself. The UI is available in English, Russian, Japanese, Portuguese (Brazil) and Chinese (Simplified).
+**This app's language.** ⋮ → **This app's language** opens the system per-app language screen for Language Selector itself. The UI is available in English, Russian and Chinese (Simplified).
+
+**About.** ⋮ → **About** shows the version and the connection mode, links to the source code, the original project and Morphe Manager, and **Dependencies and libraries** with their authors and licenses.
 
 Language Selector does not translate anything: it only tells an app which locale to use. If the app has no resources for that language, you get its default. Changing the language of system apps can misbehave and is not recommended.
 
@@ -104,6 +108,6 @@ Notes for coding agents are in `AGENTS.md`.
 
 ### Credits and license
 
-Fork of [VegaBobo/Language-Selector](https://github.com/VegaBobo/Language-Selector) by VegaBobo, who wrote the original app. This fork fixes list scrolling, adds root support next to Shizuku, a resilient service connection, QS tile fixes, a Restart button, a Russian UI and a themed icon, and targets Android 13+.
+Fork of [VegaBobo/Language-Selector](https://github.com/VegaBobo/Language-Selector) by VegaBobo, who wrote the original app. This fork fixes list scrolling, adds root support next to Shizuku, a resilient service connection, QS tile fixes, a Restart button, a Russian UI and a themed icon, a new UI ported from Morphe Manager with region lists and language search, and targets Android 13+.
 
 Licensed under [GPL-3.0-or-later](LICENSE). Thanks to [VegaBobo](https://github.com/VegaBobo/Language-Selector) for the original app (Apache-2.0, see [LICENSE.apache](LICENSE.apache)) and to [Morphe Manager](https://github.com/MorpheApp/morphe-manager) for the UI design and ported components (GPL-3.0 with additional terms, see [LICENSE](LICENSE)).

@@ -70,12 +70,10 @@
   <ul data-l="en">
     <li><a href="https://github.com/vaas1k/Language-Selector/releases/latest">GitHub Releases</a>: <code>app-release.apk</code>, <code>SHA256SUMS</code> and a VirusTotal link. Signing certificate SHA-256 (<code>apksigner verify --print-certs</code>): <code>D0:8A:A0:A2:9B:A8:DB:44:E9:97:9A:75:1A:F2:1F:92:A3:38:19:55:DB:5E:69:F2:7E:EF:34:CA:83:CC:01:87</code></li>
     <li><a href="https://github.com/ImranR98/Obtainium">Obtainium</a>: add <code>https://github.com/vaas1k/Language-Selector</code> as a source, updates follow tags.</li>
-    <li><a href="https://apt.izzysoft.de/fdroid/">IzzyOnDroid</a>: coming after the first release, via Droid-ify or Neo Store.</li>
   </ul>
   <ul data-l="ru">
     <li><a href="https://github.com/vaas1k/Language-Selector/releases/latest">GitHub Releases</a>: <code>app-release.apk</code>, <code>SHA256SUMS</code> и ссылка на VirusTotal. SHA-256 сертификата подписи (<code>apksigner verify --print-certs</code>): <code>D0:8A:A0:A2:9B:A8:DB:44:E9:97:9A:75:1A:F2:1F:92:A3:38:19:55:DB:5E:69:F2:7E:EF:34:CA:83:CC:01:87</code></li>
     <li><a href="https://github.com/ImranR98/Obtainium">Obtainium</a>: добавьте источник <code>https://github.com/vaas1k/Language-Selector</code>, обновления по тегам.</li>
-    <li><a href="https://apt.izzysoft.de/fdroid/">IzzyOnDroid</a>: появится после первого релиза, через Droid-ify или Neo Store.</li>
   </ul>
 
   <h2 data-l="en">How it works</h2>
@@ -102,12 +100,16 @@
     <img src="screenshots/en/2-app.png" alt="App language" loading="lazy">
     <img src="screenshots/en/3-menu.png" alt="Menu" loading="lazy">
     <img src="screenshots/en/4-search.png" alt="Search" loading="lazy">
+    <img src="screenshots/en/5-regions.png" alt="Language search" loading="lazy">
+    <img src="screenshots/en/6-about.png" alt="About" loading="lazy">
   </div>
   <div class="shots" data-l="ru">
     <img src="screenshots/ru/1-list.png" alt="Список приложений" loading="lazy">
     <img src="screenshots/ru/2-app.png" alt="Язык приложения" loading="lazy">
     <img src="screenshots/ru/3-menu.png" alt="Меню" loading="lazy">
     <img src="screenshots/ru/4-search.png" alt="Поиск" loading="lazy">
+    <img src="screenshots/ru/5-regions.png" alt="Поиск языков" loading="lazy">
+    <img src="screenshots/ru/6-about.png" alt="О приложении" loading="lazy">
   </div>
 
   <h2 data-l="en">How to use</h2>
@@ -115,16 +117,20 @@
   <ol data-l="en">
     <li>Option A, root: grant root to Language Selector in KernelSU/APatch (Superuser tab) or Magisk, then open the app.</li>
     <li>Option B, Shizuku: start Shizuku via Wireless debugging (again after every reboot), open the app, tap <b>Proceed</b> and <b>Allow</b>.</li>
-    <li>Pick an app, then pick a language.</li>
-    <li>If the app keeps the old language, tap <b>Restart</b>.</li>
+    <li>Pick an app. Apps with a changed language are marked <b>Modified</b> and listed first; search finds apps by name or package, ⋮ → <b>Show system apps</b> adds system apps.</li>
+    <li>Pick a language: <b>Pinned</b>, <b>User languages</b> or <b>All languages</b>. A language in All languages opens its regions; <b>Search languages</b> finds a language or region by name or tag. The current language has a check mark.</li>
+    <li>If the app keeps the old language, tap <b>Restart</b>. <b>Open</b> launches the app, <b>Settings</b> opens its system App info page.</li>
     <li>Long-press a language to pin it. The Quick Settings tile cycles the foreground app through pinned languages.</li>
+    <li>⋮ → <b>This app's language</b> sets the language of Language Selector itself: English, Russian or Chinese (Simplified).</li>
   </ol>
   <ol data-l="ru">
     <li>Вариант A, root: выдайте Language Selector root в KernelSU/APatch (вкладка "Суперпользователь") или Magisk и откройте приложение.</li>
     <li>Вариант B, Shizuku: запустите Shizuku через отладку по Wi-Fi (после каждой перезагрузки заново), откройте приложение, нажмите <b>Продолжить</b> и <b>Разрешить</b>.</li>
-    <li>Выберите приложение, затем язык.</li>
-    <li>Если язык не сменился, нажмите <b>Перезапуск</b>.</li>
+    <li>Выберите приложение. Приложения с изменённым языком помечены <b>Изменено</b> и стоят в начале; поиск работает по названию и имени пакета, ⋮ → <b>Показать системные</b> добавляет системные приложения.</li>
+    <li>Выберите язык: <b>Закреплённые</b>, <b>Языки пользователя</b> или <b>Все языки</b>. Язык в разделе "Все языки" открывает список регионов; <b>Поиск языков</b> находит язык или регион по названию или тегу. Текущий язык отмечен галочкой.</li>
+    <li>Если язык не сменился, нажмите <b>Рестарт</b>. <b>Открыть</b> запускает приложение, <b>Настройки</b> открывают его системную страницу "О приложении".</li>
     <li>Долгое нажатие закрепляет язык. Плитка в быстрых настройках переключает открытое приложение между закреплёнными языками.</li>
+    <li>⋮ → <b>Язык этого приложения</b> задаёт язык самого Language Selector: английский, русский или китайский (упрощённый).</li>
   </ol>
 
   <footer>
