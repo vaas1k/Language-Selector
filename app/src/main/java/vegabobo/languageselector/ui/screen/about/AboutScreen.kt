@@ -1,45 +1,55 @@
 package vegabobo.languageselector.ui.screen.about
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
+import androidx.compose.material.icons.outlined.Code
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
-import vegabobo.languageselector.R
-import vegabobo.languageselector.ui.components.BackButton
-import vegabobo.languageselector.ui.components.Title
-import vegabobo.languageselector.ui.screen.BaseScreen
-import vegabobo.languageselector.service.UserServiceProvider
-import vegabobo.languageselector.ui.screen.main.OperationMode
-import vegabobo.languageselector.ui.screen.main.getAppIcon
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.util.withJson
 import vegabobo.languageselector.BuildConfig
+import vegabobo.languageselector.R
+import vegabobo.languageselector.service.UserServiceProvider
+import vegabobo.languageselector.ui.components.BackHeader
+import vegabobo.languageselector.ui.components.HeaderCard
+import vegabobo.languageselector.ui.components.LeadingBox
+import vegabobo.languageselector.ui.components.ListCard
+import vegabobo.languageselector.ui.components.Title
+import vegabobo.languageselector.ui.components.edgeFade
+import vegabobo.languageselector.ui.screen.main.OperationMode
+import vegabobo.languageselector.ui.screen.main.getAppIcon
+import vegabobo.languageselector.ui.theme.Ui
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
     navigateBack: () -> Unit
@@ -50,119 +60,116 @@ fun AboutScreen(
     val appIcon = remember {
         context.packageManager.getAppIcon(context.applicationInfo).toBitmap().asImageBitmap()
     }
+    val listState = rememberLazyListState()
+    val background = MaterialTheme.colorScheme.background
 
-    BaseScreen(
-        title = stringResource(R.string.about),
-        navIcon = { BackButton { navigateBack() } }
+    LazyColumn(
+        state = listState,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(background)
+            .statusBarsPadding()
+            .edgeFade(listState, background),
+        contentPadding = PaddingValues(
+            start = Ui.ScreenPadding,
+            end = Ui.ScreenPadding,
+            bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + Ui.ScreenPadding
+        ),
+        verticalArrangement = Arrangement.spacedBy(Ui.ItemSpacing)
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = it.calculateTopPadding())
-        ) {
-            item {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        modifier = Modifier.size(96.dp),
-                        bitmap = appIcon,
-                        contentDescription = "App icon"
-                    )
-                    Text(text = stringResource(R.string.app_name), fontSize = 22.sp)
-                    Text(
-                        stringResource(R.string.version).format(
-                            BuildConfig.VERSION_NAME,
-                            BuildConfig.VERSION_CODE
+        item { BackHeader(stringResource(R.string.about), navigateBack) }
+        item {
+            HeaderCard(
+                icon = appIcon,
+                title = stringResource(R.string.app_name),
+                subtitle = stringResource(R.string.version).format(
+                    BuildConfig.VERSION_NAME,
+                    BuildConfig.VERSION_CODE
+                ),
+                label = when {
+                    !UserServiceProvider.isConnected() -> stringResource(R.string.mode_none)
+                    UserServiceProvider.opMode == OperationMode.ROOT -> stringResource(R.string.mode_root)
+                    else -> stringResource(R.string.mode_shizuku, UserServiceProvider.uid)
+                }
+            )
+        }
+        item { Title(stringResource(id = R.string.app)) }
+        item {
+            LinkItem(
+                icon = Icons.Outlined.Code,
+                title = stringResource(R.string.ghrepo),
+                description = stringResource(R.string.view_source)
+            ) { uriHandler.openUri("https://github.com/vaas1k/Language-Selector") }
+        }
+        item {
+            LinkItem(
+                icon = Icons.Outlined.History,
+                title = stringResource(R.string.original_project),
+                description = "github.com/VegaBobo/Language-Selector"
+            ) { uriHandler.openUri("https://github.com/VegaBobo/Language-Selector") }
+        }
+        item { Title(stringResource(R.string.deps_libs)) }
+        item {
+            Column(
+                Modifier
+                    .clip(Ui.CardShape)
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
+            ) {
+                libraries.forEachIndexed { index, library ->
+                    if (index > 0)
+                        HorizontalDivider(
+                            modifier = Modifier.padding(horizontal = Ui.CardPadding),
+                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)
                         )
-                    )
-                    Text(
-                        when {
-                            !UserServiceProvider.isConnected() -> stringResource(R.string.mode_none)
-                            UserServiceProvider.opMode == OperationMode.ROOT -> stringResource(R.string.mode_root)
-                            else -> stringResource(R.string.mode_shizuku, UserServiceProvider.uid)
-                        }
-                    )
+                    val url = library.website.orEmpty()
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable(enabled = url.isNotEmpty()) { uriHandler.openUri(url) }
+                            .padding(horizontal = Ui.CardPadding, vertical = 12.dp)
+                    ) {
+                        Text(text = library.name, style = MaterialTheme.typography.bodyLarge)
+                        Text(
+                            text = library.licenses.joinToString { it.name },
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
-            item {
-                Title(stringResource(id = R.string.app))
-                PreferenceItem(
-                    title = stringResource(R.string.ghrepo),
-                    description = stringResource(R.string.view_source)
-                ) {
-                    uriHandler.openUri("https://github.com/vaas1k/Language-Selector")
-                }
-                PreferenceItem(
-                    title = stringResource(R.string.original_project),
-                    description = "github.com/VegaBobo/Language-Selector"
-                ) {
-                    uriHandler.openUri("https://github.com/VegaBobo/Language-Selector")
-                }
-            }
-            item { Title(stringResource(R.string.deps_libs)) }
-            items(libraries.size) {
-                val thisLibrary = libraries[it]
-                val name = thisLibrary.name
-                var licenses = ""
-                for (license in thisLibrary.licenses) {
-                    licenses += license.name
-                }
-                val urlToOpen = thisLibrary.website ?: ""
-                PreferenceItem(
-                    title = name,
-                    description = licenses,
-                    onClick = {
-                        if (urlToOpen.isNotEmpty()) {
-                            uriHandler.openUri(urlToOpen)
-                        }
-                    },
-                )
-            }
-            item { Spacer(modifier = Modifier.padding(bottom = it.calculateBottomPadding())) }
         }
     }
-
 }
 
 @Composable
-fun PreferenceItem(
+private fun LinkItem(
+    icon: ImageVector,
     title: String,
     description: String,
-    icon: ImageVector? = null,
     onClick: () -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(
-                start = 24.dp,
-                top = 16.dp,
-                bottom = 16.dp,
-                end = 16.dp
-            )
-    ) {
-        if (icon != null) {
+    ListCard(onClick = onClick) {
+        LeadingBox {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                modifier = Modifier.padding(end = 16.dp),
+                modifier = Modifier.size(22.dp),
+                tint = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
-        Column {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleLarge
-            )
-            Spacer(Modifier.height(2.dp))
+        Column(Modifier.weight(1f)) {
+            Text(text = title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
             Text(
                 text = description,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+        Icon(
+            imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
