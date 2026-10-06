@@ -1,0 +1,4 @@
+- Current language is highlighted in the list
+- Languages and regions switch with a quick fade; all animations are 50 ms
+- Filter chips, empty states and a separate Libraries screen
+- Picking a search result hides the keyboard; back clears the search first
