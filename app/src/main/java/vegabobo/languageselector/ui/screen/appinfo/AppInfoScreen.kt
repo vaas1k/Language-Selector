@@ -11,11 +11,10 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -107,13 +106,14 @@ fun AppInfoScreen(
     }
 
     val background = MaterialTheme.colorScheme.background
-    val bottom = WindowInsets.navigationBars.union(WindowInsets.ime).asPaddingValues().calculateBottomPadding()
+    val bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     val query = uiState.searchQuery
 
     Box(
         Modifier
             .fillMaxSize()
             .background(background)
+            .imePadding()
     ) {
         LazyColumn(
             state = listState,
