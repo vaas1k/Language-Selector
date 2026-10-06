@@ -1,0 +1,1 @@
+- Back gesture no longer scales the screen, same quick fade as opening
