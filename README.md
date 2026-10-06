@@ -106,4 +106,4 @@ Notes for coding agents are in `AGENTS.md`.
 
 Fork of [VegaBobo/Language-Selector](https://github.com/VegaBobo/Language-Selector) by VegaBobo, who wrote the original app. This fork fixes list scrolling, adds root support next to Shizuku, a resilient service connection, QS tile fixes, a Restart button, a Russian UI and a themed icon, and targets Android 13+.
 
-Licensed under the [Apache License 2.0](LICENSE).
+Licensed under [GPL-3.0-or-later](LICENSE). Thanks to [VegaBobo](https://github.com/VegaBobo/Language-Selector) for the original app (Apache-2.0, see [LICENSE.apache](LICENSE.apache)) and to [Morphe Manager](https://github.com/MorpheApp/morphe-manager) for the UI design and ported components (GPL-3.0 with additional terms, see [LICENSE](LICENSE)).

@@ -15,3 +15,4 @@ Language Selector sets a different language for any app, the same way the system
 Language Selector does NOT translate apps. It only tells an app which locale to use; if the app has no resources for that language, nothing changes. Changing the language of system apps may cause unexpected behavior and is NOT RECOMMENDED.
 
 Fork of VegaBobo/Language-Selector with its own package id (dev.vaas1k.languageselector), maintained at github.com/vaas1k/Language-Selector.
+UI design and components from Morphe Manager (github.com/MorpheApp/morphe-manager).

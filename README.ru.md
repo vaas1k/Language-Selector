@@ -106,4 +106,4 @@ Language Selector ничего не переводит, он лишь сообщ
 
 Форк [VegaBobo/Language-Selector](https://github.com/VegaBobo/Language-Selector); оригинальное приложение написал VegaBobo. В форке исправлена прокрутка списка, добавлен root наряду с Shizuku, устойчивое подключение к сервису, исправлена плитка, появились кнопка перезапуска, русский интерфейс и тематическая иконка; поддерживается Android 13+.
 
-Лицензия – [Apache License 2.0](LICENSE).
+Лицензия – [GPL-3.0-or-later](LICENSE). Спасибо [VegaBobo](https://github.com/VegaBobo/Language-Selector) за оригинальное приложение (Apache-2.0, см. [LICENSE.apache](LICENSE.apache)) и [Morphe Manager](https://github.com/MorpheApp/morphe-manager) за дизайн интерфейса и перенесённые компоненты (GPL-3.0 с дополнительными условиями, см. [LICENSE](LICENSE)).

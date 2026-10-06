@@ -15,3 +15,4 @@ Language Selector задаёт отдельный язык любому прил
 Language Selector НЕ переводит приложения, он лишь сообщает приложению, какую локаль использовать. Если нужного языка в приложении нет, ничего не изменится. Менять язык системным приложениям НЕ РЕКОМЕНДУЕТСЯ: они могут вести себя непредсказуемо.
 
 Форк VegaBobo/Language-Selector с собственным идентификатором пакета (dev.vaas1k.languageselector), репозиторий: github.com/vaas1k/Language-Selector.
+Дизайн интерфейса и компоненты – из Morphe Manager (github.com/MorpheApp/morphe-manager).

@@ -1,8 +1,16 @@
 Language Selector
 
+Copyright 2026 vaas1k
+Licensed under the GNU General Public License, version 3 or (at your option)
+any later version (GPL-3.0-or-later), see LICENSE.
+
 Based on Language Selector by VegaBobo
 https://github.com/VegaBobo/Language-Selector
+Originally licensed under the Apache License, Version 2.0, see LICENSE.apache.
+
+Portions of the user interface are derived from Morphe Manager
+https://github.com/MorpheApp/morphe-manager
+Licensed under GPL-3.0; additional terms under GPLv3 section 7 apply, see LICENSE.
+The "Morphe" name and logos are not used and not licensed.
 
 Modifications copyright 2026 vaas1k
-
-Licensed under the Apache License, Version 2.0 (Apache-2.0), see LICENSE.

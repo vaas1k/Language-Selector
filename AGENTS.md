@@ -2,6 +2,8 @@
 
 Android app that sets per-app locales through the hidden `ILocaleManager`
 API, executed in a privileged process via Shizuku (or root through libsu).
+License: GPL-3.0-or-later (see `LICENSE`); code ported from Morphe Manager must keep
+its "Based on Morphe Manager" header comment.
 
 ## Stack
 
