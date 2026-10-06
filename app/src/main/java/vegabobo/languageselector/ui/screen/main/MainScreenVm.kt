@@ -42,7 +42,7 @@ class MainScreenVm @Inject constructor(
     val uiState: StateFlow<MainScreenState> = _uiState.asStateFlow()
     var lastSelectedApp: AppInfo? = null
     val dao = appInfoDb.appInfoDao()
-    private val iconPx = (32 * app.resources.displayMetrics.density).toInt()
+    private val iconPx = (40 * app.resources.displayMetrics.density).toInt()
     private val icons = ConcurrentHashMap<String, ImageBitmap>()
 
     fun cachedIcon(pkg: String): ImageBitmap? = icons[pkg]

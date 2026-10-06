@@ -2,10 +2,10 @@
 <resources>
     <string name="app_language">Idioma do app</string>
     <string name="system_default">Padrão do sistema</string>
-    <string name="user_languages">Idiomas do usuário:</string>
-    <string name="pinned">Fixado:</string>
-    <string name="region">Região:</string>
-    <string name="all_languages">Todos os idiomas:</string>
+    <string name="user_languages">Idiomas do usuário</string>
+    <string name="pinned">Fixado</string>
+    <string name="region">Região</string>
+    <string name="all_languages">Todos os idiomas</string>
     <string name="show_only_user_apps">Mostrar apenas apps do usuário</string>
     <string name="show_system_apps">Mostrar apps do sistema</string>
     <string name="settings">Config.</string>
@@ -43,4 +43,7 @@
     <string name="mode_root">Modo: root ✓</string>
     <string name="mode_shizuku">Modo: Shizuku ✓ (uid %1$d)</string>
     <string name="mode_none">Modo: não conectado</string>
+    <string name="scroll_to_top">Voltar ao topo</string>
+    <string name="search_languages">Pesquisar idiomas</string>
+    <string name="no_languages_found">Nenhum idioma encontrado</string>
 </resources>

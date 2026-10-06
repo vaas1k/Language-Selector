@@ -20,7 +20,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.material3.Text
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
@@ -49,7 +52,10 @@ import kotlinx.coroutines.flow.collectLatest
 import vegabobo.languageselector.R
 import vegabobo.languageselector.ui.components.AppListItem
 import vegabobo.languageselector.ui.components.AppSearchBar
-import vegabobo.languageselector.ui.screen.BaseScreen
+import vegabobo.languageselector.ui.components.ScrollToTopButton
+import vegabobo.languageselector.ui.components.edgeFade
+import vegabobo.languageselector.ui.theme.Ui
+import vegabobo.languageselector.ui.theme.animatedItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -104,7 +110,7 @@ fun MainScreen(
             mainScreenVm.resetSnackBarDisplay()
         }
     }
-    BaseScreen(snackBarHost = sb) { padding ->
+    Scaffold(snackbarHost = { SnackbarHost(sb) }) { padding ->
         if (uiState.isLoading)
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -175,24 +181,30 @@ fun MainScreen(
 
                 LazyColumn(
                     state = lazyListState,
-                    contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
-                    modifier = Modifier.semantics { traversalIndex = 1f }
+                    contentPadding = PaddingValues(
+                        start = Ui.ScreenPadding,
+                        end = Ui.ScreenPadding,
+                        bottom = padding.calculateBottomPadding() + Ui.ScreenPadding
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(Ui.ItemSpacing),
+                    modifier = Modifier
+                        .semantics { traversalIndex = 1f }
+                        .edgeFade(
+                            lazyListState,
+                            MaterialTheme.colorScheme.background,
+                            WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                        )
                 ) {
                     item {
                         Spacer(
                             Modifier
                                 .statusBarsPadding()
-                                .padding(top = 72.dp)
+                                .padding(top = 60.dp)
                         )
                     }
                     items(uiState.homeApps, key = { it.pkg }) { thisApp ->
                         AppListItem(
-                            modifier = Modifier.padding(
-                                start = 26.dp,
-                                end = 26.dp,
-                                top = 4.dp,
-                                bottom = 4.dp
-                            ),
+                            modifier = animatedItem(),
                             app = thisApp,
                             cachedIcon = mainScreenVm::cachedIcon,
                             loadIcon = mainScreenVm::loadIcon,
@@ -203,6 +215,13 @@ fun MainScreen(
                         )
                     }
                 }
+
+                ScrollToTopButton(
+                    state = lazyListState,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = Ui.ScreenPadding, bottom = padding.calculateBottomPadding() + Ui.ScreenPadding)
+                )
             }
         }
     }
