@@ -204,7 +204,7 @@ fun MainScreen(
                     }
                     items(uiState.homeApps, key = { it.pkg }) { thisApp ->
                         AppListItem(
-                            modifier = animatedItem(),
+                            modifier = Modifier.animatedItem(this),
                             app = thisApp,
                             cachedIcon = mainScreenVm::cachedIcon,
                             loadIcon = mainScreenVm::loadIcon,

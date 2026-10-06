@@ -169,10 +169,10 @@ fun AppInfoScreen(
             if (uiState.selectedLanguage != -1) {
                 val region = uiState.listOfAllLanguages[uiState.selectedLanguage]
                 item(key = "t-region") {
-                    Title("${stringResource(R.string.region)} – ${region.language}", animatedItem())
+                    Title("${stringResource(R.string.region)} – ${region.language}", Modifier.animatedItem(this))
                 }
                 items(region.locales, key = { "r-${it.languageTag}" }) { locale ->
-                    PinnableLocale(locale, animatedItem()) {
+                    PinnableLocale(locale, Modifier.animatedItem(this)) {
                         appInfoVm.onClickLocale(locale)
                         appInfoVm.onBackWhenSelectedLang()
                         coroutineScope.launch { listState.scrollToItem(0) }
@@ -181,11 +181,11 @@ fun AppInfoScreen(
             } else {
                 if (query.isEmpty()) {
                     if (uiState.listOfPinnedLanguages.isNotEmpty()) {
-                        item(key = "t-pinned") { Title(stringResource(R.string.pinned), animatedItem()) }
+                        item(key = "t-pinned") { Title(stringResource(R.string.pinned), Modifier.animatedItem(this)) }
                         items(uiState.listOfPinnedLanguages, key = { "p-${it.languageTag}" }) { locale ->
                             LocaleItemList(
                                 itemText = locale.name,
-                                modifier = animatedItem(),
+                                modifier = Modifier.animatedItem(this),
                                 code = languageCode(locale.languageTag),
                                 subtitle = locale.languageTag,
                                 onClick = { appInfoVm.onClickLocale(locale) },
@@ -197,18 +197,18 @@ fun AppInfoScreen(
                         }
                     }
 
-                    item(key = "t-user") { Title(stringResource(R.string.user_languages), animatedItem()) }
+                    item(key = "t-user") { Title(stringResource(R.string.user_languages), Modifier.animatedItem(this)) }
                     item(key = "system") {
                         LocaleItemList(
                             itemText = stringResource(R.string.system_default),
-                            modifier = animatedItem()
+                            modifier = Modifier.animatedItem(this)
                         ) { appInfoVm.onClickResetLang() }
                     }
                     items(uiState.listOfSuggestedLanguages, key = { "u-${it.languageTag}" }) { locale ->
-                        PinnableLocale(locale, animatedItem())
+                        PinnableLocale(locale, Modifier.animatedItem(this))
                     }
 
-                    item(key = "t-all") { Title(stringResource(R.string.all_languages), animatedItem()) }
+                    item(key = "t-all") { Title(stringResource(R.string.all_languages), Modifier.animatedItem(this)) }
                 }
 
                 stickyHeader(key = "search") {
@@ -242,7 +242,7 @@ fun AppInfoScreen(
                         val language = uiState.listOfAllLanguages[index]
                         LocaleItemList(
                             itemText = language.language,
-                            modifier = animatedItem(),
+                            modifier = Modifier.animatedItem(this),
                             code = languageCode(language.locales.first().languageTag),
                             hasChildren = true
                         ) {
@@ -254,7 +254,7 @@ fun AppInfoScreen(
                     item(key = "empty") {
                         Text(
                             text = stringResource(R.string.no_languages_found),
-                            modifier = animatedItem()
+                            modifier = Modifier.animatedItem(this)
                                 .fillMaxWidth()
                                 .padding(24.dp),
                             textAlign = TextAlign.Center,
@@ -263,7 +263,7 @@ fun AppInfoScreen(
                     }
                 } else {
                     items(uiState.searchResults, key = { "s-${it.languageTag}" }) { locale ->
-                        PinnableLocale(locale, animatedItem()) {
+                        PinnableLocale(locale, Modifier.animatedItem(this)) {
                             keyboard?.hide()
                             appInfoVm.onClickLocale(locale)
                         }

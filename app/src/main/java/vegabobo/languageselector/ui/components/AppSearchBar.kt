@@ -131,7 +131,7 @@ fun AppSearchBar(
 
                 items(results, key = { it.pkg }) { app ->
                     AppListItem(
-                        modifier = animatedItem(),
+                        modifier = Modifier.animatedItem(this),
                         app = app,
                         cachedIcon = cachedIcon,
                         loadIcon = loadIcon,
@@ -154,7 +154,7 @@ fun AppSearchBar(
                 }
                 items(history, key = { it.pkg }) { app ->
                     AppListItem(
-                        modifier = animatedItem(),
+                        modifier = Modifier.animatedItem(this),
                         app = app,
                         cachedIcon = cachedIcon,
                         loadIcon = loadIcon,

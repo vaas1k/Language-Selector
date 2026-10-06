@@ -57,11 +57,13 @@ object Ui {
         fadeOut(tween(EXIT_MS)) + scaleOut(tween(EXIT_MS), targetScale = SCALE_FROM)
 }
 
-fun LazyItemScope.animatedItem(): Modifier = Modifier.animateItem(
-    fadeInSpec = tween(Ui.ENTER_MS),
-    placementSpec = Ui.listSpring,
-    fadeOutSpec = tween(180)
-)
+fun Modifier.animatedItem(scope: LazyItemScope): Modifier = with(scope) {
+    this@animatedItem.animateItem(
+        fadeInSpec = tween(Ui.ENTER_MS),
+        placementSpec = Ui.listSpring,
+        fadeOutSpec = tween(180)
+    )
+}
 
 fun Modifier.pressClickable(
     shape: Shape,
