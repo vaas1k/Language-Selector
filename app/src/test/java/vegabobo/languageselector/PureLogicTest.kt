@@ -97,6 +97,16 @@ class PureLogicTest {
     }
 
     @Test
+    fun mainRegionFirst_plainThenLikelyRegionThenByName() {
+        val tags = listOf("ru-BY", "ru-KG", "ru", "ru-RU", "ru-UA")
+            .map(java.util.Locale::forLanguageTag)
+            .mainRegionFirst("RU")
+            .map { it.toLanguageTag() }
+        assertEquals(listOf("ru", "ru-RU"), tags.take(2))
+        assertEquals(setOf("ru-BY", "ru-KG", "ru-UA"), tags.drop(2).toSet())
+    }
+
+    @Test
     fun localeManager_groupsEveryLocaleAndSkipsRoot() {
         val regions = LocaleManager().localeList
         assertTrue(regions.none { it.language.isEmpty() })
