@@ -48,4 +48,7 @@
     <string name="back">返回</string>
     <string name="search_languages">搜索语言</string>
     <string name="no_languages_found">未找到语言</string>
+    <string name="no_apps_to_show">没有可显示的应用</string>
+    <string name="no_apps_found">未找到应用</string>
+    <string name="open_source_licenses">作者和许可证</string>
 </resources>

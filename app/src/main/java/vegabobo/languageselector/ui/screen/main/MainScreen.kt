@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FilterListOff
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,6 +54,7 @@ import kotlinx.coroutines.flow.collectLatest
 import vegabobo.languageselector.R
 import vegabobo.languageselector.ui.components.AppListItem
 import vegabobo.languageselector.ui.components.AppSearchBar
+import vegabobo.languageselector.ui.components.EmptyState
 import vegabobo.languageselector.ui.components.ScrollToTopButton
 import vegabobo.languageselector.ui.components.edgeFade
 import vegabobo.languageselector.ui.theme.Ui
@@ -92,7 +95,7 @@ fun MainScreen(
                     )
                     val i = mainScreenVm.getIndexFromAppInfoItem()
                     if (r == SnackbarResult.ActionPerformed && i != -1)
-                        lazyListState.animateScrollToItem(i + 1)
+                        lazyListState.scrollToItem(i + 1)
                 }
 
                 SnackBarDisplay.MOVED_TO_BOTTOM -> {
@@ -102,7 +105,7 @@ fun MainScreen(
                     )
                     val i = mainScreenVm.getIndexFromAppInfoItem()
                     if (r == SnackbarResult.ActionPerformed && i != -1)
-                        lazyListState.animateScrollToItem(i + 1)
+                        lazyListState.scrollToItem(i + 1)
                 }
 
                 else -> {}
@@ -214,6 +217,16 @@ fun MainScreen(
                             }
                         )
                     }
+                    if (uiState.homeApps.isEmpty())
+                        item(key = "empty") {
+                            EmptyState(
+                                icon = Icons.Outlined.FilterListOff,
+                                text = stringResource(R.string.no_apps_to_show),
+                                modifier = Modifier
+                                    .animatedItem(this)
+                                    .fillParentMaxHeight(0.6f)
+                            )
+                        }
                 }
 
                 ScrollToTopButton(
