@@ -10,7 +10,7 @@ API, executed in a privileged process via Shizuku (or root through libsu).
   `IActivityManager`, `IActivityTaskManager`), compileOnly
 - `app/src/main/aidl/` – `IUserService` contract between the app and the
   privileged process
-- minSdk 35 (Android 15+), targets AOSP and HyperOS; Shizuku: latest two releases
+- minSdk 33 (Android 13+), targets AOSP and HyperOS; Shizuku: latest two releases
 
 ## Layout
 

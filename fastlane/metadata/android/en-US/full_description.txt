@@ -1,7 +1,7 @@
 Language Selector sets a different language for any app, the same way the system "App languages" screen does, but for every app, including ones that don't list themselves there.
 
 <b>Requirements</b>
-- Android 15 or newer
+- Android 13 or newer
 - Root (KernelSU or Magisk) or Shizuku. KernelSU shows no prompt: add the app to the KernelSU allowlist manually.
 
 <b>Features</b>

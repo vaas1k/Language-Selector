@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "dev.vaas1k.languageselector"
-        minSdk = 35
+        minSdk = 33
         targetSdk = 36
         versionCode = 6
         versionName = "1.05"

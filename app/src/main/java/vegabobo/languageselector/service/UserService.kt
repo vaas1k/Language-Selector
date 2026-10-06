@@ -3,6 +3,7 @@ package vegabobo.languageselector.service
 import android.app.IActivityManager
 import android.app.IActivityTaskManager
 import android.app.ILocaleManager
+import android.os.Build
 import android.os.LocaleList
 import android.os.Process
 import rikka.shizuku.SystemServiceHelper
@@ -29,7 +30,10 @@ class UserService : IUserService.Stub() {
     }
 
     override fun setApplicationLocales(packageName: String?, locales: LocaleList?) {
-        localeManager.setApplicationLocales(packageName, currentUserId(), locales, true)
+        if (Build.VERSION.SDK_INT < 34)
+            localeManager.setApplicationLocales(packageName, currentUserId(), locales)
+        else
+            localeManager.setApplicationLocales(packageName, currentUserId(), locales, true)
     }
 
     override fun getApplicationLocales(packageName: String?): LocaleList {
@@ -58,7 +62,12 @@ class UserService : IUserService.Stub() {
     }
 
     override fun getFirstRunningTaskPackage(): String {
-        val runningTask = activityTaskManager.getTasks(1, false, false, -1).firstOrNull()
+        val tasks = try {
+            activityTaskManager.getTasks(1, false, false, -1)
+        } catch (_: NoSuchMethodError) {
+            activityTaskManager.getTasks(1, false, false)
+        }
+        val runningTask = tasks.firstOrNull()
         return runningTask?.topActivity?.packageName ?: ""
     }
 }

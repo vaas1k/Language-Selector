@@ -2,7 +2,7 @@
 
 [Русская версия](README.ru.md) · [Website](https://vaas1k.github.io/Language-Selector/)
 
-Set a different language for any app on Android 15+, the same way the system "App languages" screen does, but for every app, including ones that don't list themselves there.
+Set a different language for any app on Android 13+, the same way the system "App languages" screen does, but for every app, including ones that don't list themselves there.
 
 <div>
 <img src="docs/screenshots/en/1-list.png" alt="App list" width="200"/>
@@ -24,7 +24,7 @@ Language Selector is a front end for that one system call:
 
 ### Requirements
 
-- Android 15 or newer.
+- Android 13 or newer.
 - Root (KernelSU, Magisk or APatch) **or** [Shizuku](https://shizuku.rikka.app/) (one of the latest two releases). See [Setup](#setup).
 
 ### Install
@@ -102,6 +102,6 @@ Notes for coding agents are in `AGENTS.md`.
 
 ### Credits and license
 
-Fork of [VegaBobo/Language-Selector](https://github.com/VegaBobo/Language-Selector) by VegaBobo, who wrote the original app. This fork fixes list scrolling, adds root support next to Shizuku, a resilient service connection, QS tile fixes, a Restart button, a Russian UI and a themed icon, and targets Android 15+ only.
+Fork of [VegaBobo/Language-Selector](https://github.com/VegaBobo/Language-Selector) by VegaBobo, who wrote the original app. This fork fixes list scrolling, adds root support next to Shizuku, a resilient service connection, QS tile fixes, a Restart button, a Russian UI and a themed icon, and targets Android 13+.
 
 Licensed under the [Apache License 2.0](LICENSE).

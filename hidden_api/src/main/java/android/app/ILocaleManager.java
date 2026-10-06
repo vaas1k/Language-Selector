@@ -7,6 +7,7 @@ import android.os.LocaleList;
 
 public interface ILocaleManager extends IInterface {
 
+    void setApplicationLocales(String packageName, int userId, LocaleList locales);
     void setApplicationLocales(String packageName, int userId, LocaleList locales, boolean fromDelegate);
     LocaleList getApplicationLocales(String packageName, int userId);
     LocaleList getSystemLocales();
