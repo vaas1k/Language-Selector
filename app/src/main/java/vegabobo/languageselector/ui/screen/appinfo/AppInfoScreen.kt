@@ -2,6 +2,8 @@ package vegabobo.languageselector.ui.screen.appinfo
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +20,8 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +32,7 @@ import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,20 +43,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import kotlinx.coroutines.launch
 import vegabobo.languageselector.R
 import vegabobo.languageselector.ui.components.BackHeader
+import vegabobo.languageselector.ui.components.EmptyState
 import vegabobo.languageselector.ui.components.HeaderCard
 import vegabobo.languageselector.ui.components.LocaleItemList
 import vegabobo.languageselector.ui.components.QuickTextButton
@@ -72,8 +78,8 @@ fun AppInfoScreen(
     val ctx = LocalContext.current
     val res = LocalResources.current
     val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
     val keyboard = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     fun pinToast(locale: String) {
         val pinTxt =
@@ -94,6 +100,7 @@ fun AppInfoScreen(
             modifier = modifier,
             code = languageCode(locale.languageTag),
             subtitle = locale.languageTag,
+            selected = locale.languageTag == uiState.currentTag,
             onClick = onClick,
             onLongClick = {
                 pinToast(locale.name)
@@ -111,76 +118,74 @@ fun AppInfoScreen(
     val bottom = WindowInsets.navigationBars.exclude(WindowInsets.ime).asPaddingValues().calculateBottomPadding()
     val query = uiState.searchQuery
 
+    fun LazyListScope.header() {
+        item(key = "back") { BackHeader(stringResource(R.string.app_language), navigateBack) }
+
+        item(key = "header") {
+            HeaderCard(
+                icon = uiState.appIcon,
+                title = uiState.appName,
+                subtitle = uiState.appPackage,
+                label = uiState.currentLanguage.ifEmpty { stringResource(R.string.system_default) }
+            )
+        }
+
+        item(key = "actions") {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(Ui.ItemSpacing)
+            ) {
+                QuickTextButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = { appInfoVm.onClickOpen() },
+                    icon = Icons.AutoMirrored.Outlined.OpenInNew,
+                    text = stringResource(R.string.open),
+                    primary = true
+                )
+                QuickTextButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = { appInfoVm.onClickRestart() },
+                    icon = Icons.Outlined.Refresh,
+                    text = stringResource(R.string.restart)
+                )
+                QuickTextButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = { appInfoVm.onClickSettings() },
+                    icon = Icons.Outlined.Settings,
+                    text = stringResource(R.string.settings)
+                )
+            }
+        }
+    }
+
     Box(
         Modifier
             .fillMaxSize()
             .background(background)
             .imePadding()
     ) {
-        LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .edgeFade(listState, background),
-            contentPadding = PaddingValues(
-                start = Ui.ScreenPadding,
-                end = Ui.ScreenPadding,
-                bottom = bottom + Ui.ScreenPadding
-            ),
-            verticalArrangement = Arrangement.spacedBy(Ui.ItemSpacing)
-        ) {
-            item(key = "back") { BackHeader(stringResource(R.string.app_language), navigateBack) }
-
-            item(key = "header") {
-                HeaderCard(
-                    icon = uiState.appIcon,
-                    title = uiState.appName,
-                    subtitle = uiState.appPackage,
-                    label = uiState.currentLanguage.ifEmpty { stringResource(R.string.system_default) }
-                )
-            }
-
-            item(key = "actions") {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(Ui.ItemSpacing)
-                ) {
-                    QuickTextButton(
-                        modifier = Modifier.weight(1f),
-                        onClick = { appInfoVm.onClickOpen() },
-                        icon = Icons.AutoMirrored.Outlined.OpenInNew,
-                        text = stringResource(R.string.open),
-                        primary = true
-                    )
-                    QuickTextButton(
-                        modifier = Modifier.weight(1f),
-                        onClick = { appInfoVm.onClickRestart() },
-                        icon = Icons.Outlined.Refresh,
-                        text = stringResource(R.string.restart)
-                    )
-                    QuickTextButton(
-                        modifier = Modifier.weight(1f),
-                        onClick = { appInfoVm.onClickSettings() },
-                        icon = Icons.Outlined.Settings,
-                        text = stringResource(R.string.settings)
-                    )
-                }
-            }
-
-            if (uiState.selectedLanguage != -1) {
-                val region = uiState.listOfAllLanguages[uiState.selectedLanguage]
-                item(key = "t-region") {
-                    Title("${stringResource(R.string.region)} – ${region.language}", Modifier.animatedItem(this))
-                }
-                items(region.locales, key = { "r-${it.languageTag}" }) { locale ->
-                    PinnableLocale(locale, Modifier.animatedItem(this)) {
-                        appInfoVm.onClickLocale(locale)
-                        appInfoVm.onBackWhenSelectedLang()
-                        coroutineScope.launch { listState.scrollToItem(0) }
+        AnimatedContent(
+            targetState = uiState.selectedLanguage,
+            transitionSpec = { Ui.enter togetherWith Ui.exit },
+            label = "regions"
+        ) { selected ->
+            if (selected != -1) {
+                val region = uiState.listOfAllLanguages[selected]
+                LocaleList(rememberLazyListState(), background, bottom) {
+                    header()
+                    item(key = "t-region") {
+                        Title("${stringResource(R.string.region)} – ${region.language}", Modifier.animatedItem(this))
+                    }
+                    items(region.locales, key = { "r-${it.languageTag}" }) { locale ->
+                        PinnableLocale(locale, Modifier.animatedItem(this)) {
+                            appInfoVm.onClickLocale(locale)
+                            appInfoVm.onBackWhenSelectedLang()
+                            listState.requestScrollToItem(0)
+                        }
                     }
                 }
-            } else {
+            } else LocaleList(listState, background, bottom) {
+                header()
                 if (query.isEmpty()) {
                     if (uiState.listOfPinnedLanguages.isNotEmpty()) {
                         item(key = "t-pinned") { Title(stringResource(R.string.pinned), Modifier.animatedItem(this)) }
@@ -190,6 +195,7 @@ fun AppInfoScreen(
                                 modifier = Modifier.animatedItem(this),
                                 code = languageCode(locale.languageTag),
                                 subtitle = locale.languageTag,
+                                selected = locale.languageTag == uiState.currentTag,
                                 onClick = { appInfoVm.onClickLocale(locale) },
                                 onLongClick = {
                                     unpinToast(locale.name)
@@ -203,7 +209,8 @@ fun AppInfoScreen(
                     item(key = "system") {
                         LocaleItemList(
                             itemText = stringResource(R.string.system_default),
-                            modifier = Modifier.animatedItem(this)
+                            modifier = Modifier.animatedItem(this),
+                            selected = uiState.currentTag == ""
                         ) { appInfoVm.onClickResetLang() }
                     }
                     items(uiState.listOfSuggestedLanguages, key = { "u-${it.languageTag}" }) { locale ->
@@ -247,43 +254,57 @@ fun AppInfoScreen(
                             modifier = Modifier.animatedItem(this),
                             code = languageCode(language.locales.first().languageTag),
                             hasChildren = true
-                        ) {
-                            appInfoVm.onClickSingleLanguage(index)
-                            coroutineScope.launch { listState.scrollToItem(0) }
-                        }
+                        ) { appInfoVm.onClickSingleLanguage(index) }
                     }
                 } else if (uiState.searchResults.isEmpty()) {
                     item(key = "empty") {
-                        Text(
+                        EmptyState(
+                            icon = Icons.Outlined.SearchOff,
                             text = stringResource(R.string.no_languages_found),
                             modifier = Modifier.animatedItem(this)
-                                .fillMaxWidth()
-                                .padding(24.dp),
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 } else {
                     items(uiState.searchResults, key = { "s-${it.languageTag}" }) { locale ->
                         PinnableLocale(locale, Modifier.animatedItem(this)) {
-                            keyboard?.hide()
+                            focusManager.clearFocus()
                             appInfoVm.onClickLocale(locale)
                         }
                     }
                 }
             }
         }
-
-        ScrollToTopButton(
-            state = listState,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = Ui.ScreenPadding, bottom = bottom + Ui.ScreenPadding)
-        )
     }
 
     BackHandler(enabled = uiState.selectedLanguage != -1 || query.isNotEmpty()) {
         if (uiState.selectedLanguage != -1) appInfoVm.onBackWhenSelectedLang()
         else appInfoVm.onSearchQueryChange("")
+    }
+}
+
+@Composable
+private fun LocaleList(state: LazyListState, background: Color, bottom: Dp, content: LazyListScope.() -> Unit) {
+    Box(Modifier.fillMaxSize()) {
+        LazyColumn(
+            state = state,
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .edgeFade(state, background),
+            contentPadding = PaddingValues(
+                start = Ui.ScreenPadding,
+                end = Ui.ScreenPadding,
+                bottom = bottom + Ui.ScreenPadding
+            ),
+            verticalArrangement = Arrangement.spacedBy(Ui.ItemSpacing),
+            content = content
+        )
+
+        ScrollToTopButton(
+            state = state,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = Ui.ScreenPadding, bottom = bottom + Ui.ScreenPadding)
+        )
     }
 }

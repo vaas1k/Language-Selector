@@ -1,18 +1,15 @@
 package vegabobo.languageselector.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -54,6 +51,7 @@ import vegabobo.languageselector.ui.theme.pressClickable
 @Composable
 fun ListCard(
     modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.surfaceContainer,
     onLongClick: (() -> Unit)? = null,
     onClick: () -> Unit,
     content: @Composable RowScope.() -> Unit
@@ -61,7 +59,7 @@ fun ListCard(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .pressClickable(Ui.CardShape, MaterialTheme.colorScheme.surfaceContainer, onLongClick, onClick)
+            .pressClickable(Ui.CardShape, color, onLongClick, onClick)
             .padding(Ui.CardPadding),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Ui.ItemSpacing),
@@ -70,9 +68,9 @@ fun ListCard(
 }
 
 @Composable
-fun HeaderCard(icon: ImageBitmap?, title: String, subtitle: String, label: String) {
+fun HeaderCard(icon: ImageBitmap?, title: String, subtitle: String, label: String, modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceContainer, Ui.CardShape)
             .padding(Ui.CardPadding),
@@ -109,6 +107,30 @@ fun HeaderCard(icon: ImageBitmap?, title: String, subtitle: String, label: Strin
                 )
             }
         }
+    }
+}
+
+@Composable
+fun EmptyState(icon: ImageVector, text: String, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(32.dp),
+        verticalArrangement = Arrangement.spacedBy(Ui.ItemSpacing, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.size(56.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+        )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
@@ -152,13 +174,13 @@ fun ScrollToTopButton(state: LazyListState, modifier: Modifier = Modifier, after
     AnimatedVisibility(
         visible = visible,
         modifier = modifier,
-        enter = fadeIn(tween(Ui.ENTER_MS)) + scaleIn(tween(Ui.ENTER_MS), initialScale = 0.85f),
-        exit = fadeOut(tween(180)) + scaleOut(tween(180), targetScale = 0.85f)
+        enter = Ui.enter,
+        exit = Ui.exit
     ) {
         Surface(
             onClick = {
                 haptic.performHapticFeedback(HapticFeedbackType.VirtualKey)
-                scope.launch { state.animateScrollToItem(0) }
+                scope.launch { state.scrollToItem(0) }
             },
             modifier = Modifier.size(Ui.FabSize),
             shape = CircleShape,

@@ -82,8 +82,10 @@ class AppInfoVm @Inject constructor(
     fun updateCurrentLanguageState() {
         UserServiceProvider.run {
             val currentLocale = getApplicationLocales(appInfo.packageName)
-            if (!currentLocale.isEmpty)
-                _uiState.update { it.copy(currentLanguage = currentLocale.get(0).capDisplayName()) }
+            val locale = if (currentLocale.isEmpty) null else currentLocale.get(0)
+            _uiState.update {
+                it.copy(currentLanguage = locale?.capDisplayName().orEmpty(), currentTag = locale?.toLanguageTag().orEmpty())
+            }
         }
     }
 
@@ -123,7 +125,7 @@ class AppInfoVm @Inject constructor(
     fun onClickResetLang() {
         UserServiceProvider.run {
             setApplicationLocales(appInfo.packageName, LocaleList())
-            _uiState.update { it.copy(currentLanguage = "") }
+            _uiState.update { it.copy(currentLanguage = "", currentTag = "") }
         }
     }
 

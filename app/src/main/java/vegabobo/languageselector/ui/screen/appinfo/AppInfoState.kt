@@ -22,6 +22,7 @@ data class AppInfoState(
     val appName: String = "",
     val appPackage: String = "",
     val currentLanguage: String = "",
+    val currentTag: String? = null,
     val listOfSuggestedLanguages: List<SingleLocale> = emptyList(),
     val listOfPinnedLanguages: List<SingleLocale> = emptyList(),
     val selectedLanguage: Int = -1,

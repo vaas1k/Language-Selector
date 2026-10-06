@@ -10,16 +10,14 @@ package vegabobo.languageselector.ui.theme
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.FiniteAnimationSpec
-import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -34,7 +32,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 
 object Ui {
@@ -50,26 +47,29 @@ object Ui {
     val FabSize = 44.dp
 
     const val PRESS_SCALE = 0.97f
-    const val ENTER_MS = 220
-    const val EXIT_MS = 320
-    const val SCALE_FROM = 0.95f
+    const val ANIM_MS = 50
 
-    val listSpring: FiniteAnimationSpec<IntOffset> = spring(dampingRatio = 0.8f, stiffness = 400f)
-    val pressSpring: FiniteAnimationSpec<Float> =
-        spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium)
+    fun <T> fast(): FiniteAnimationSpec<T> = tween(ANIM_MS, easing = LinearOutSlowInEasing)
 
-    val enter: EnterTransition =
-        fadeIn(tween(ENTER_MS)) + scaleIn(tween(ENTER_MS), initialScale = SCALE_FROM)
-    val exit: ExitTransition =
-        fadeOut(tween(EXIT_MS)) + scaleOut(tween(EXIT_MS), targetScale = SCALE_FROM)
+    val enter: EnterTransition = fadeIn(fast())
+    val exit: ExitTransition = fadeOut(fast())
 }
 
 fun Modifier.animatedItem(scope: LazyItemScope): Modifier = with(scope) {
-    this@animatedItem.animateItem(
-        fadeInSpec = tween(Ui.ENTER_MS),
-        placementSpec = Ui.listSpring,
-        fadeOutSpec = tween(180)
-    )
+    this@animatedItem.animateItem(fadeInSpec = null, placementSpec = Ui.fast(), fadeOutSpec = null)
+}
+
+fun Modifier.pressScale(source: InteractionSource, shape: Shape? = null): Modifier = composed {
+    val pressed by source.collectIsPressedAsState()
+    val scale = animateFloatAsState(if (pressed) Ui.PRESS_SCALE else 1f, Ui.fast(), label = "press")
+    graphicsLayer {
+        scaleX = scale.value
+        scaleY = scale.value
+        if (shape != null) {
+            this.shape = shape
+            clip = true
+        }
+    }
 }
 
 fun Modifier.pressClickable(
@@ -80,14 +80,7 @@ fun Modifier.pressClickable(
 ): Modifier = composed {
     val haptic = LocalHapticFeedback.current
     val source = remember { MutableInteractionSource() }
-    val pressed by source.collectIsPressedAsState()
-    val scale by animateFloatAsState(if (pressed) Ui.PRESS_SCALE else 1f, Ui.pressSpring, label = "press")
-    graphicsLayer {
-        scaleX = scale
-        scaleY = scale
-        this.shape = shape
-        clip = true
-    }
+    pressScale(source, shape)
         .background(color)
         .combinedClickable(
             interactionSource = source,
