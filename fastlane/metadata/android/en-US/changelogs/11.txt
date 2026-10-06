@@ -1,0 +1,2 @@
+- Language button with a flag and the EN/RU code in the search bar replaces the menu item
+- Release file is now named language-selector-<version>.apk
