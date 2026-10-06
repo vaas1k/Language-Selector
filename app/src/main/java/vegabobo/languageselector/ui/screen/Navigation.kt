@@ -32,7 +32,9 @@ fun Navigation() {
         enterTransition = { Ui.enter },
         exitTransition = { Ui.exit },
         popEnterTransition = { Ui.enter },
-        popExitTransition = { Ui.exit }
+        popExitTransition = { Ui.exit },
+        predictivePopEnterTransition = { Ui.enter },
+        predictivePopExitTransition = { Ui.exit }
     ) {
         composable(
             route = HOME
