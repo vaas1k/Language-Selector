@@ -76,7 +76,7 @@ The Quick Settings tile works in both modes and cycles through your pinned langu
 
 **Quick Settings tile.** Add the "Language Selector" tile. Tapping it cycles the foreground app through your pinned languages. With no pinned languages the tile shows Unavailable; system apps are skipped.
 
-**This app's language.** ⋮ → **This app's language** opens the system per-app language screen for Language Selector itself. The UI is available in English, Russian and Chinese (Simplified).
+**This app's language.** The button next to ⋮ in the search bar (flag icon and the two-letter code of the current UI language: EN, RU or ZH) opens the system per-app language screen for Language Selector itself. The UI is available in English, Russian and Chinese (Simplified).
 
 **About.** ⋮ → **About** shows the version and the connection mode, links to the source code, the original project and Morphe Manager, and **Dependencies and libraries** with their authors and licenses.
 
