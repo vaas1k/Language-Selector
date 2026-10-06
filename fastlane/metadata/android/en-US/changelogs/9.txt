@@ -1,0 +1,1 @@
+- Main region of a language (ru-RU, en-US, zh-CN) is listed right after the plain language, other regions by name
