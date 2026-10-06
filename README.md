@@ -31,7 +31,7 @@ Language Selector is a front end for that one system call:
 
 ### Install
 
-- **GitHub Releases.** Download `app-release.apk` from [the latest release](https://github.com/vaas1k/Language-Selector/releases/latest). Each release has `SHA256SUMS` and a VirusTotal link. Signing certificate SHA-256, check with `apksigner verify --print-certs app-release.apk`:
+- **GitHub Releases.** Download `language-selector-X.Y.Z.apk` from [the latest release](https://github.com/vaas1k/Language-Selector/releases/latest). Each release has `SHA256SUMS` and a VirusTotal link. Signing certificate SHA-256, check with `apksigner verify --print-certs language-selector-X.Y.Z.apk`:
   `D0:8A:A0:A2:9B:A8:DB:44:E9:97:9A:75:1A:F2:1F:92:A3:38:19:55:DB:5E:69:F2:7E:EF:34:CA:83:CC:01:87`
 - **Obtainium.** In [Obtainium](https://github.com/ImranR98/Obtainium) add `https://github.com/vaas1k/Language-Selector` as an app source; updates follow release tags.
 

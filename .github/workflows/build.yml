@@ -48,7 +48,11 @@ jobs:
 
       - name: Checksums
         if: startsWith(github.ref, 'refs/tags/v')
-        run: sha256sum app/build/outputs/apk/release/app-release.apk | sed 's#app/build/outputs/apk/release/##' > SHA256SUMS
+        run: |
+          APK="language-selector-${GITHUB_REF_NAME#v}.apk"
+          mv app/build/outputs/apk/release/app-release.apk "$APK"
+          sha256sum "$APK" > SHA256SUMS
+          echo "APK=$APK" >> "$GITHUB_ENV"
 
       - name: VirusTotal
         id: vt
@@ -57,7 +61,7 @@ jobs:
         uses: crazy-max/ghaction-virustotal@v5
         with:
           vt_api_key: ${{ secrets.VT_API_KEY }}
-          files: app/build/outputs/apk/release/app-release.apk
+          files: ${{ env.APK }}
 
       - name: Release notes
         if: startsWith(github.ref, 'refs/tags/v')
@@ -70,7 +74,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         with:
           files: |
-            app/build/outputs/apk/release/app-release.apk
+            ${{ env.APK }}
             SHA256SUMS
           body_path: ${{ runner.temp }}/notes.md
           generate_release_notes: true

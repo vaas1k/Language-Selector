@@ -31,7 +31,7 @@ Language Selector – фронтенд к этому одному системн
 
 ### Установка
 
-- **GitHub Releases.** Скачайте `app-release.apk` из [последнего релиза](https://github.com/vaas1k/Language-Selector/releases/latest). В каждом релизе есть `SHA256SUMS` и ссылка на VirusTotal. SHA-256 сертификата подписи, проверка – `apksigner verify --print-certs app-release.apk`:
+- **GitHub Releases.** Скачайте `language-selector-X.Y.Z.apk` из [последнего релиза](https://github.com/vaas1k/Language-Selector/releases/latest). В каждом релизе есть `SHA256SUMS` и ссылка на VirusTotal. SHA-256 сертификата подписи, проверка – `apksigner verify --print-certs language-selector-X.Y.Z.apk`:
   `D0:8A:A0:A2:9B:A8:DB:44:E9:97:9A:75:1A:F2:1F:92:A3:38:19:55:DB:5E:69:F2:7E:EF:34:CA:83:CC:01:87`
 - **Obtainium.** В [Obtainium](https://github.com/ImranR98/Obtainium) добавьте источник `https://github.com/vaas1k/Language-Selector`, обновления приходят по тегам релизов.
 
