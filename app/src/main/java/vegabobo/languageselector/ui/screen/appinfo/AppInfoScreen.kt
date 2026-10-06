@@ -2,22 +2,35 @@ package vegabobo.languageselector.ui.screen.appinfo
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,23 +39,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import vegabobo.languageselector.R
-import vegabobo.languageselector.ui.components.BackButton
+import vegabobo.languageselector.ui.components.BackHeader
+import vegabobo.languageselector.ui.components.HeaderCard
 import vegabobo.languageselector.ui.components.LocaleItemList
 import vegabobo.languageselector.ui.components.QuickTextButton
+import vegabobo.languageselector.ui.components.ScrollToTopButton
 import vegabobo.languageselector.ui.components.Title
-import vegabobo.languageselector.ui.screen.BaseScreen
-import kotlinx.coroutines.launch
+import vegabobo.languageselector.ui.components.edgeFade
+import vegabobo.languageselector.ui.components.languageCode
+import vegabobo.languageselector.ui.theme.Ui
+import vegabobo.languageselector.ui.theme.animatedItem
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppInfoScreen(
     appId: String,
@@ -54,6 +71,7 @@ fun AppInfoScreen(
     val res = LocalResources.current
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+    val keyboard = LocalSoftwareKeyboardController.current
 
     fun pinToast(locale: String) {
         val pinTxt =
@@ -67,64 +85,71 @@ fun AppInfoScreen(
         Toast.makeText(ctx, pinTxt, Toast.LENGTH_SHORT).show()
     }
 
+    @Composable
+    fun PinnableLocale(locale: SingleLocale, modifier: Modifier, onClick: () -> Unit = { appInfoVm.onClickLocale(locale) }) {
+        LocaleItemList(
+            itemText = locale.name,
+            modifier = modifier,
+            code = languageCode(locale.languageTag),
+            subtitle = locale.languageTag,
+            onClick = onClick,
+            onLongClick = {
+                pinToast(locale.name)
+                appInfoVm.onPinLang(locale)
+            }
+        )
+    }
+
     LaunchedEffect(Unit) {
         appInfoVm.initFromAppId(appId)
         appInfoVm.updatePinnedLangsFromSP()
     }
-    BaseScreen(
-        title = stringResource(R.string.app_language),
-        navIcon = {
-            BackButton { navigateBack() }
-        }
+
+    val background = MaterialTheme.colorScheme.background
+    val bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val query = uiState.searchQuery
+
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(background)
+            .imePadding()
     ) {
         LazyColumn(
             state = listState,
             modifier = Modifier
-                .padding(top = it.calculateTopPadding())
-                .animateContentSize(),
+                .fillMaxSize()
+                .statusBarsPadding()
+                .edgeFade(listState, background),
+            contentPadding = PaddingValues(
+                start = Ui.ScreenPadding,
+                end = Ui.ScreenPadding,
+                bottom = bottom + Ui.ScreenPadding
+            ),
+            verticalArrangement = Arrangement.spacedBy(Ui.ItemSpacing)
         ) {
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 18.dp, end = 18.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        modifier = Modifier.size(84.dp),
-                        bitmap = uiState.appIcon
-                            ?: ImageBitmap.imageResource(R.drawable.icon_placeholder),
-                        contentDescription = "App icon"
-                    )
-                    Column(
-                        modifier = Modifier
-                            .padding(18.dp)
-                            .weight(1f)
-                    ) {
-                        Text(text = uiState.appName, fontSize = 22.sp, maxLines = 1)
-                        Text(text = uiState.appPackage, fontSize = 14.sp, maxLines = 1)
-                        Text(
-                            text = uiState.currentLanguage.ifEmpty { stringResource(R.string.system_default) },
-                            fontSize = 14.sp,
-                            maxLines = 1
-                        )
-                    }
-                }
+            item(key = "back") { BackHeader(stringResource(R.string.app_language), navigateBack) }
+
+            item(key = "header") {
+                HeaderCard(
+                    icon = uiState.appIcon,
+                    title = uiState.appName,
+                    subtitle = uiState.appPackage,
+                    label = uiState.currentLanguage.ifEmpty { stringResource(R.string.system_default) }
+                )
             }
 
-            item {
+            item(key = "actions") {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Ui.ItemSpacing)
                 ) {
                     QuickTextButton(
                         modifier = Modifier.weight(1f),
                         onClick = { appInfoVm.onClickOpen() },
                         icon = Icons.AutoMirrored.Outlined.OpenInNew,
-                        text = stringResource(R.string.open)
+                        text = stringResource(R.string.open),
+                        primary = true
                     )
                     QuickTextButton(
                         modifier = Modifier.weight(1f),
@@ -142,69 +167,121 @@ fun AppInfoScreen(
             }
 
             if (uiState.selectedLanguage != -1) {
-                item { Title(stringResource(R.string.region)) }
-                items(uiState.listOfAllLanguages[uiState.selectedLanguage].locales.size) { index ->
-                    val thisLangReg =
-                        uiState.listOfAllLanguages[uiState.selectedLanguage].locales[index]
-                    LocaleItemList(
-                        itemText = thisLangReg.name,
-                        onClick = {
-                            appInfoVm.onClickLocale(thisLangReg)
-                            appInfoVm.onBackWhenSelectedLang()
-                            coroutineScope.launch { listState.scrollToItem(0) }
-                        },
-                        onLongClick = {
-                            pinToast(thisLangReg.name)
-                            appInfoVm.onPinLang(thisLangReg)
-                        }
-                    )
+                val region = uiState.listOfAllLanguages[uiState.selectedLanguage]
+                item(key = "t-region") {
+                    Title("${stringResource(R.string.region)} – ${region.language}", Modifier.animatedItem(this))
+                }
+                items(region.locales, key = { "r-${it.languageTag}" }) { locale ->
+                    PinnableLocale(locale, Modifier.animatedItem(this)) {
+                        appInfoVm.onClickLocale(locale)
+                        appInfoVm.onBackWhenSelectedLang()
+                        coroutineScope.launch { listState.scrollToItem(0) }
+                    }
                 }
             } else {
-                if (uiState.listOfPinnedLanguages.size != 0) {
-                    item { Title(stringResource(R.string.pinned)) }
-                    items(uiState.listOfPinnedLanguages.size) { index ->
-                        val thisLanguage = uiState.listOfPinnedLanguages[index]
+                if (query.isEmpty()) {
+                    if (uiState.listOfPinnedLanguages.isNotEmpty()) {
+                        item(key = "t-pinned") { Title(stringResource(R.string.pinned), Modifier.animatedItem(this)) }
+                        items(uiState.listOfPinnedLanguages, key = { "p-${it.languageTag}" }) { locale ->
+                            LocaleItemList(
+                                itemText = locale.name,
+                                modifier = Modifier.animatedItem(this),
+                                code = languageCode(locale.languageTag),
+                                subtitle = locale.languageTag,
+                                onClick = { appInfoVm.onClickLocale(locale) },
+                                onLongClick = {
+                                    unpinToast(locale.name)
+                                    appInfoVm.onRemovePin(locale)
+                                }
+                            )
+                        }
+                    }
+
+                    item(key = "t-user") { Title(stringResource(R.string.user_languages), Modifier.animatedItem(this)) }
+                    item(key = "system") {
                         LocaleItemList(
-                            itemText = thisLanguage.name,
-                            onClick = { appInfoVm.onClickLocale(thisLanguage) },
-                            onLongClick = {
-                                unpinToast(thisLanguage.name)
-                                appInfoVm.onRemovePin(thisLanguage)
-                            }
+                            itemText = stringResource(R.string.system_default),
+                            modifier = Modifier.animatedItem(this)
+                        ) { appInfoVm.onClickResetLang() }
+                    }
+                    items(uiState.listOfSuggestedLanguages, key = { "u-${it.languageTag}" }) { locale ->
+                        PinnableLocale(locale, Modifier.animatedItem(this))
+                    }
+
+                    item(key = "t-all") { Title(stringResource(R.string.all_languages), Modifier.animatedItem(this)) }
+                }
+
+                stickyHeader(key = "search") {
+                    Box(
+                        Modifier
+                            .background(background)
+                            .padding(top = 8.dp, bottom = 4.dp)
+                    ) {
+                        OutlinedTextField(
+                            value = query,
+                            onValueChange = { appInfoVm.onSearchQueryChange(it) },
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = { Text(stringResource(R.string.search_languages)) },
+                            leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
+                            trailingIcon = {
+                                if (query.isNotEmpty())
+                                    IconButton(onClick = { appInfoVm.onSearchQueryChange("") }) {
+                                        Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.clear))
+                                    }
+                            },
+                            singleLine = true,
+                            shape = RoundedCornerShape(12.dp),
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                            keyboardActions = KeyboardActions(onSearch = { keyboard?.hide() })
                         )
                     }
                 }
 
-                item { Title(stringResource(R.string.user_languages)) }
-                item {
-                    LocaleItemList(stringResource(R.string.system_default)) { appInfoVm.onClickResetLang() }
-                }
-                items(uiState.listOfSuggestedLanguages.size) { index ->
-                    val thisLanguage = uiState.listOfSuggestedLanguages[index]
-                    LocaleItemList(
-                        itemText = thisLanguage.name,
-                        onClick = { appInfoVm.onClickLocale(thisLanguage) },
-                        onLongClick = {
-                            pinToast(thisLanguage.name)
-                            appInfoVm.onPinLang(thisLanguage)
+                if (query.isEmpty()) {
+                    items(uiState.listOfAllLanguages.size, key = { "a-${uiState.listOfAllLanguages[it].language}" }) { index ->
+                        val language = uiState.listOfAllLanguages[index]
+                        LocaleItemList(
+                            itemText = language.language,
+                            modifier = Modifier.animatedItem(this),
+                            code = languageCode(language.locales.first().languageTag),
+                            hasChildren = true
+                        ) {
+                            appInfoVm.onClickSingleLanguage(index)
+                            coroutineScope.launch { listState.scrollToItem(0) }
                         }
-                    )
-                }
-
-                item { Title(stringResource(R.string.all_languages)) }
-                items(uiState.listOfAllLanguages.size) { index ->
-                    val thisLanguage = uiState.listOfAllLanguages[index]
-                    LocaleItemList(thisLanguage.language) {
-                        appInfoVm.onClickSingleLanguage(index)
-                        coroutineScope.launch { listState.scrollToItem(0) }
+                    }
+                } else if (uiState.searchResults.isEmpty()) {
+                    item(key = "empty") {
+                        Text(
+                            text = stringResource(R.string.no_languages_found),
+                            modifier = Modifier.animatedItem(this)
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                } else {
+                    items(uiState.searchResults, key = { "s-${it.languageTag}" }) { locale ->
+                        PinnableLocale(locale, Modifier.animatedItem(this)) {
+                            keyboard?.hide()
+                            appInfoVm.onClickLocale(locale)
+                        }
                     }
                 }
             }
-            item { Spacer(modifier = Modifier.padding(it.calculateBottomPadding())) }
         }
+
+        ScrollToTopButton(
+            state = listState,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = Ui.ScreenPadding, bottom = bottom + Ui.ScreenPadding)
+        )
     }
 
-    if (uiState.selectedLanguage != -1)
-        BackHandler { appInfoVm.onBackWhenSelectedLang() }
-
+    BackHandler(enabled = uiState.selectedLanguage != -1 || query.isNotEmpty()) {
+        if (uiState.selectedLanguage != -1) appInfoVm.onBackWhenSelectedLang()
+        else appInfoVm.onSearchQueryChange("")
+    }
 }

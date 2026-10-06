@@ -44,6 +44,8 @@ class AppInfoVm @Inject constructor(
 
     lateinit var appInfo: ApplicationInfo
 
+    private val searchIndex by lazy { localeManager.localeList.toSearchIndex(Locale.getDefault()) }
+
     fun initFromAppId(appId: String) {
         appInfo =
             app.packageManager.getApplicationInfo(appId, PackageManager.ApplicationInfoFlags.of(0))
@@ -54,7 +56,7 @@ class AppInfoVm @Inject constructor(
             )
         }
         viewModelScope.launch(Dispatchers.IO) {
-            val px = (84 * app.resources.displayMetrics.density).toInt()
+            val px = (64 * app.resources.displayMetrics.density).toInt()
             val icon = app.packageManager.getAppIcon(appInfo).toBitmap(px, px).asImageBitmap()
             _uiState.update { it.copy(appIcon = icon) }
         }
@@ -69,6 +71,11 @@ class AppInfoVm @Inject constructor(
         }
 
         _uiState.update { it.copy(listOfAllLanguages = localeManager.localeList) }
+        viewModelScope.launch(Dispatchers.Default) { searchIndex }
+    }
+
+    fun onSearchQueryChange(query: String) {
+        _uiState.update { it.copy(searchQuery = query, searchResults = searchIndex.search(query)) }
     }
 
     fun updateCurrentLanguageState() {

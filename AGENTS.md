@@ -56,5 +56,5 @@ without it release falls back to the debug key.
   are verified on a device.
 - Bump `versionCode`/`versionName` in `app/build.gradle.kts` and add
   `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` per release.
-- Strings live in `res/values*/strings.xml` (en, ja, pt-BR, zh-CN); add a
+- Strings live in `res/values*/strings.xml` (values, values-ru, values-zh-rCN); add a
   key to all of them.

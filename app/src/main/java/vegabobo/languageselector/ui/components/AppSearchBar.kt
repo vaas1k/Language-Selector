@@ -6,11 +6,19 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.union
+import vegabobo.languageselector.ui.theme.Ui
+import vegabobo.languageselector.ui.theme.animatedItem
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -32,10 +40,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import vegabobo.languageselector.ui.screen.main.AppInfo
 import vegabobo.languageselector.ui.screen.main.AppLabels
 
@@ -89,18 +95,24 @@ fun AppSearchBar(
         val results = remember(apps, query, selectedLabels) {
             apps.filterNot { filter(query, it, selectedLabels) }
         }
-        LazyColumn {
+        val listState = rememberLazyListState()
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.edgeFade(listState, MaterialTheme.colorScheme.surfaceContainerHigh),
+            contentPadding = PaddingValues(
+                start = Ui.ScreenPadding,
+                end = Ui.ScreenPadding,
+                top = 8.dp,
+                bottom = WindowInsets.navigationBars.union(WindowInsets.ime).asPaddingValues()
+                    .calculateBottomPadding() + Ui.ScreenPadding
+            ),
+            verticalArrangement = Arrangement.spacedBy(Ui.ItemSpacing)
+        ) {
             if (query.isNotBlank()) {
                 item {
                     Row(
-                        modifier = Modifier
-                            .padding(
-                                start = 23.dp,
-                                top = 8.dp,
-                                bottom = 8.dp,
-                                end = 8.dp
-                            )
-                            .horizontalScroll(rememberScrollState())
+                        modifier = Modifier.horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         FilterLabel(
                             title = stringResource(R.string.filter_show_system),
@@ -109,7 +121,6 @@ fun AppSearchBar(
                             },
                             isSelected = selectedLabels.contains(AppLabels.SYSTEM_APP)
                         )
-                        Spacer(Modifier.padding(8.dp))
                         FilterLabel(
                             title = stringResource(R.string.filter_show_modified),
                             onClick = { onSelectedLabelsChange(AppLabels.MODIFIED) },
@@ -120,12 +131,7 @@ fun AppSearchBar(
 
                 items(results, key = { it.pkg }) { app ->
                     AppListItem(
-                        modifier = Modifier.padding(
-                            start = 23.dp,
-                            end = 23.dp,
-                            top = 4.dp,
-                            bottom = 4.dp
-                        ),
+                        modifier = Modifier.animatedItem(this),
                         app = app,
                         cachedIcon = cachedIcon,
                         loadIcon = loadIcon,
@@ -134,53 +140,26 @@ fun AppSearchBar(
                 }
             } else if (history.isNotEmpty()) {
                 item {
-                    Row(
-                        Modifier.padding(4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.history).uppercase(),
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium,
-                            letterSpacing = 1.sp,
-                            color = MaterialTheme.colorScheme.secondary,
-                            modifier = modifier
-                                .padding(start = 18.dp)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Title(
+                            title = stringResource(R.string.history),
+                            modifier = Modifier
+                                .weight(1f)
                                 .padding(bottom = 8.dp)
-                                .padding(top = 8.dp)
                         )
-                        Spacer(modifier = Modifier.weight(1f))
                         TextButton(onClick = { onClickClear(); focusRequester.requestFocus() }) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text(text = stringResource(R.string.clear))
-                            }
+                            Text(text = stringResource(R.string.clear))
                         }
-                        Spacer(modifier = Modifier.padding(6.dp))
                     }
                 }
                 items(history, key = { it.pkg }) { app ->
                     AppListItem(
-                        modifier = Modifier.padding(
-                            start = 23.dp,
-                            end = 23.dp,
-                            top = 4.dp,
-                            bottom = 4.dp
-                        ),
+                        modifier = Modifier.animatedItem(this),
                         app = app,
                         cachedIcon = cachedIcon,
                         loadIcon = loadIcon,
                         onClickApp = { onClickApp(app) }
                     )
-                }
-                item {
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Spacer(Modifier.weight(1f))
-
-                    }
                 }
             } else {
                 item {
@@ -188,7 +167,7 @@ fun AppSearchBar(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(10.dp)
-                            .alpha(0.4f),
+                            .alpha(0.6f),
                         text = stringResource(R.string.search_hint),
                         textAlign = TextAlign.Center
                     )

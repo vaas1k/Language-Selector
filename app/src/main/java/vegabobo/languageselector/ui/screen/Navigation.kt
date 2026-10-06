@@ -12,6 +12,7 @@ import vegabobo.languageselector.ui.screen.Destinations.HOME
 import vegabobo.languageselector.ui.screen.about.AboutScreen
 import vegabobo.languageselector.ui.screen.appinfo.AppInfoScreen
 import vegabobo.languageselector.ui.screen.main.MainScreen
+import vegabobo.languageselector.ui.theme.Ui
 
 object Destinations {
     const val HOME = "home"
@@ -24,7 +25,11 @@ fun Navigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = HOME
+        startDestination = HOME,
+        enterTransition = { Ui.enter },
+        exitTransition = { Ui.exit },
+        popEnterTransition = { Ui.enter },
+        popExitTransition = { Ui.exit }
     ) {
         composable(
             route = HOME

@@ -3,9 +3,9 @@
     <string name="app_language">App语言</string>
     <string name="system_default">系统默认</string>
     <string name="user_languages">用户语言</string>
-    <string name="pinned">置顶:</string>
-    <string name="region">地区:</string>
-    <string name="all_languages">全部语言:</string>
+    <string name="pinned">置顶</string>
+    <string name="region">地区</string>
+    <string name="all_languages">全部语言</string>
     <string name="show_only_user_apps">只显示用户应用</string>
     <string name="show_system_apps">显示系统应用</string>
     <string name="settings">设置</string>
@@ -17,7 +17,7 @@
     <string name="pinned_ok">%1$s 已置顶</string>
     <string name="unpinned">%1$s 取消置顶</string>
     <string name="about">关于</string>
-    <string name="deps_libs">依赖库信息:</string>
+    <string name="deps_libs">依赖库信息</string>
     <string name="version">版本 %1$s (%2$s)</string>
     <string name="app">应用</string>
     <string name="ghrepo">Github 仓库</string>
@@ -43,4 +43,7 @@
     <string name="mode_root">模式：root ✓</string>
     <string name="mode_shizuku">模式：Shizuku ✓ (uid %1$d)</string>
     <string name="mode_none">模式：未连接</string>
+    <string name="scroll_to_top">回到顶部</string>
+    <string name="search_languages">搜索语言</string>
+    <string name="no_languages_found">未找到语言</string>
 </resources>

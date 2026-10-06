@@ -1,10 +1,10 @@
 <resources>
     <string name="app_language">Язык приложения</string>
     <string name="system_default">Системный</string>
-    <string name="user_languages">Языки пользователя:</string>
-    <string name="pinned">Закреплённые:</string>
-    <string name="region">Регион:</string>
-    <string name="all_languages">Все языки:</string>
+    <string name="user_languages">Языки пользователя</string>
+    <string name="pinned">Закреплённые</string>
+    <string name="region">Регион</string>
+    <string name="all_languages">Все языки</string>
     <string name="show_only_user_apps">Только пользовательские</string>
     <string name="show_system_apps">Показать системные</string>
     <string name="settings">Настройки</string>
@@ -16,7 +16,7 @@
     <string name="pinned_ok">%1$s закреплён</string>
     <string name="unpinned">%1$s откреплён</string>
     <string name="about">О приложении</string>
-    <string name="deps_libs">Зависимости и библиотеки:</string>
+    <string name="deps_libs">Зависимости и библиотеки</string>
     <string name="version">версия %1$s (%2$s)</string>
     <string name="app">Приложение</string>
     <string name="ghrepo">Репозиторий GitHub</string>
@@ -42,4 +42,7 @@
     <string name="mode_root">Режим: root ✓</string>
     <string name="mode_shizuku">Режим: Shizuku ✓ (uid %1$d)</string>
     <string name="mode_none">Режим: не подключено</string>
+    <string name="scroll_to_top">Наверх</string>
+    <string name="search_languages">Поиск языков</string>
+    <string name="no_languages_found">Языки не найдены</string>
 </resources>

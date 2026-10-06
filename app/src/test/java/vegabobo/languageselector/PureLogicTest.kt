@@ -8,6 +8,8 @@ import org.junit.Test
 import vegabobo.languageselector.ui.components.filter
 import vegabobo.languageselector.ui.screen.appinfo.SingleLocale
 import vegabobo.languageselector.ui.screen.appinfo.parsePinned
+import vegabobo.languageselector.ui.screen.appinfo.search
+import vegabobo.languageselector.ui.screen.appinfo.toSearchIndex
 import vegabobo.languageselector.ui.screen.appinfo.serializePinned
 import vegabobo.languageselector.ui.screen.main.AppInfo
 import vegabobo.languageselector.ui.screen.main.AppLabels
@@ -77,6 +79,21 @@ class PureLogicTest {
         assertTrue(filter("tele", sysTg, emptyList())) // system hidden by default
         assertFalse(filter("tele", sysTg, listOf(AppLabels.SYSTEM_APP)))
         assertTrue(filter("tele", tg, listOf(AppLabels.MODIFIED))) // not modified
+    }
+
+    @Test
+    fun localeSearch_matchesLanguageRegionTagAndUiName() {
+        val index = LocaleManager().localeList.toSearchIndex(java.util.Locale.ENGLISH)
+        fun tags(q: String) = index.search(q).map { it.languageTag }
+        assertTrue("ru-RU" in tags("рус"))
+        assertTrue(tags("рус").first().startsWith("ru"))
+        assertTrue("ru-RU" in tags("РУС"))
+        assertEquals(listOf("en-GB"), tags("en-GB"))
+        assertEquals(listOf("en-GB"), tags(" en_gb "))
+        assertTrue("de-DE" in tags("Deutschland"))
+        assertTrue("de-DE" in tags("german"))
+        assertTrue(tags("   ").isEmpty())
+        assertTrue(tags("zzqq").isEmpty())
     }
 
     @Test
