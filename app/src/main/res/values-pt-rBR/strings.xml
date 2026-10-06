@@ -26,8 +26,7 @@
     <string name="unavailable">Indisponível</string>
     <string name="search">Pesquisar</string>
     <string name="own_language">Idioma deste aplicativo</string>
-    <string name="label_system_app">App do sistema</string>
-    <string name="label_user_app">App do usuário</string>
+    <string name="label_system_app">Sistema</string>
     <string name="label_modified">Modificado</string>
     <string name="filter_show_system">Mostrar sistema</string>
     <string name="filter_show_modified">Mostrar modificados</string>

@@ -63,7 +63,8 @@ fun AppListItem(
             Text(text = app.name, fontSize = 18.sp, fontWeight = FontWeight.Medium, maxLines = 1)
             Text(text = app.pkg, fontSize = 12.sp, maxLines = 1)
             Row {
-                TextLabel(text = stringResource(if (app.isSystemApp()) R.string.label_system_app else R.string.label_user_app))
+                if (app.isSystemApp())
+                    TextLabel(text = stringResource(R.string.label_system_app))
                 if (app.isModified())
                     TextLabel(text = stringResource(R.string.label_modified))
             }

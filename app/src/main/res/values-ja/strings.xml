@@ -26,8 +26,7 @@
     <string name="unavailable">利用できません</string>
     <string name="search">検索</string>
     <string name="own_language">このアプリの言語</string>
-    <string name="label_system_app">システムアプリ</string>
-    <string name="label_user_app">ユーザーアプリ</string>
+    <string name="label_system_app">システム</string>
     <string name="label_modified">変更済み</string>
     <string name="filter_show_system">システムを表示</string>
     <string name="filter_show_modified">変更済みを表示</string>

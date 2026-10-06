@@ -26,7 +26,6 @@
     <string name="search">Поиск приложений</string>
     <string name="own_language">Язык этого приложения</string>
     <string name="label_system_app">Системное</string>
-    <string name="label_user_app">Пользовательское</string>
     <string name="label_modified">Изменено</string>
     <string name="filter_show_system">Системные</string>
     <string name="filter_show_modified">Изменённые</string>

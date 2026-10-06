@@ -26,8 +26,7 @@
     <string name="unavailable">不可用</string>
     <string name="search">搜索</string>
     <string name="own_language">本应用的语言</string>
-    <string name="label_system_app">系统应用</string>
-    <string name="label_user_app">用户应用</string>
+    <string name="label_system_app">系统</string>
     <string name="label_modified">已修改</string>
     <string name="filter_show_system">显示系统</string>
     <string name="filter_show_modified">显示已修改</string>

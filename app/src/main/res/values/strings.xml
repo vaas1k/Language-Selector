@@ -27,8 +27,7 @@
 
     <string name="search">Search apps</string>
     <string name="own_language">This app\'s language</string>
-    <string name="label_system_app">System App</string>
-    <string name="label_user_app">User App</string>
+    <string name="label_system_app">System</string>
     <string name="label_modified">Modified</string>
     <string name="filter_show_system">Show System</string>
     <string name="filter_show_modified">Show Modified</string>
