@@ -44,6 +44,7 @@
     width: 200px; height: auto; flex: none; border-radius: 16px;
     border: 1px solid var(--line); background: var(--card);
   }
+  .compare img { max-width: 100%; height: auto; }
   ol, ul { padding-left: 1.3em; }
   code { font-size: .9em; background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
   footer { margin-top: 40px; color: var(--muted); font-size: .9rem; }
@@ -108,6 +109,31 @@
     <img src="screenshots/ru/2-app.png" alt="Язык приложения" loading="lazy">
     <img src="screenshots/ru/3-menu.png" alt="Меню" loading="lazy">
     <img src="screenshots/ru/4-search.png" alt="Поиск" loading="lazy">
+  </div>
+
+  <h2 data-l="en">Before / after</h2>
+  <h2 data-l="ru">Было / стало</h2>
+  <p data-l="en">Original 1.04 (left) and this fork 1.05 (right), same phone, same input.</p>
+  <p data-l="ru">Оригинал 1.04 (слева) и этот форк 1.05 (справа), один телефон, одинаковый ввод.</p>
+  <div class="compare" data-l="en">
+    <p>Cold start. Both draw the first frame in about 0.1 s; the fork shows the root/Shizuku status while loading and lists modified apps first.</p>
+    <img src="media/compare-startup.gif" alt="Cold start" loading="lazy">
+    <p>Six fast flings. 99th percentile frame time: 200 ms in the original, 10 ms in the fork (dumpsys gfxinfo).</p>
+    <img src="media/compare-scroll.gif" alt="Fast scrolling" loading="lazy">
+    <p>Typing "ban": the original filters the list about 2.4 s later, the fork on the same frame.</p>
+    <img src="media/compare-search.gif" alt="Search" loading="lazy">
+    <p>App screen: the fork adds pinned languages and a Restart button.</p>
+    <img src="media/compare-app-screen.gif" alt="App language screen" loading="lazy">
+  </div>
+  <div class="compare" data-l="ru">
+    <p>Холодный старт. Первый кадр у обоих примерно через 0,1 с; форк показывает статус root/Shizuku во время загрузки и ставит изменённые приложения первыми.</p>
+    <img src="media/compare-startup.gif" alt="Холодный старт" loading="lazy">
+    <p>Шесть быстрых свайпов. 99-й перцентиль времени кадра: 200 мс у оригинала, 10 мс у форка (dumpsys gfxinfo).</p>
+    <img src="media/compare-scroll.gif" alt="Быстрая прокрутка" loading="lazy">
+    <p>Ввод "ban": оригинал фильтрует список примерно через 2,4 с, форк – в том же кадре.</p>
+    <img src="media/compare-search.gif" alt="Поиск" loading="lazy">
+    <p>Экран приложения: в форке есть закреплённые языки и кнопка "Перезапуск".</p>
+    <img src="media/compare-app-screen.gif" alt="Экран языка приложения" loading="lazy">
   </div>
 
   <h2 data-l="en">How to use</h2>
