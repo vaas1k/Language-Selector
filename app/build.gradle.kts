@@ -16,8 +16,8 @@ android {
         applicationId = "dev.vaas1k.languageselector"
         minSdk = 35
         targetSdk = 36
-        versionCode = 6
-        versionName = "1.05"
+        versionCode = 7
+        versionName = "1.06"
     }
 
     val keystoreProps = rootProject.file("keystore.properties")

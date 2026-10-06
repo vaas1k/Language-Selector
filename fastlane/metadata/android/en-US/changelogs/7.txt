@@ -1,0 +1,1 @@
+- KernelSU note in the guide: re-enable root after reinstalling the app

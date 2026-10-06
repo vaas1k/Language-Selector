@@ -44,6 +44,7 @@ Pick one of the two options. The loading screen shows which one is in use, and A
 
 1. Grant root to Language Selector in your root manager.
    - KernelSU: open the **Superuser** tab and turn on the toggle next to Language Selector. KernelSU shows no prompt, so without this step the app has no root.
+     KernelSU drops the grant when the app is reinstalled or gets a new uid (e.g. switching from a test build to the release), so turn the toggle on again after that.
    - APatch: same, in the **Superuser** tab.
    - Magisk: tap **Grant** in the prompt on first launch.
 2. Open Language Selector. The loading screen says "Root access granted" and the app list appears.
