@@ -9,7 +9,9 @@ import androidx.navigation.navArgument
 import vegabobo.languageselector.ui.screen.Destinations.ABOUT
 import vegabobo.languageselector.ui.screen.Destinations.APP_INFO
 import vegabobo.languageselector.ui.screen.Destinations.HOME
+import vegabobo.languageselector.ui.screen.Destinations.LIBRARIES
 import vegabobo.languageselector.ui.screen.about.AboutScreen
+import vegabobo.languageselector.ui.screen.about.LibrariesScreen
 import vegabobo.languageselector.ui.screen.appinfo.AppInfoScreen
 import vegabobo.languageselector.ui.screen.main.MainScreen
 import vegabobo.languageselector.ui.theme.Ui
@@ -18,6 +20,7 @@ object Destinations {
     const val HOME = "home"
     const val APP_INFO = "app_info"
     const val ABOUT = "about"
+    const val LIBRARIES = "libraries"
 }
 
 @Composable
@@ -49,7 +52,14 @@ fun Navigation() {
         }
 
         composable(route = ABOUT) {
-            AboutScreen(navigateBack = { navController.navigateUp() })
+            AboutScreen(
+                navigateBack = { navController.navigateUp() },
+                navigateToLibraries = { navController.navigate(LIBRARIES) }
+            )
+        }
+
+        composable(route = LIBRARIES) {
+            LibrariesScreen(navigateBack = { navController.navigateUp() })
         }
     }
 }

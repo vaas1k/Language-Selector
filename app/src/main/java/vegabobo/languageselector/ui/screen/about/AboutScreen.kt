@@ -1,14 +1,12 @@
 package vegabobo.languageselector.ui.screen.about
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,11 +14,12 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.outlined.LibraryBooks
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -50,6 +48,7 @@ import vegabobo.languageselector.ui.components.BackHeader
 import vegabobo.languageselector.ui.components.HeaderCard
 import vegabobo.languageselector.ui.components.LeadingBox
 import vegabobo.languageselector.ui.components.ListCard
+import vegabobo.languageselector.ui.components.TextLabel
 import vegabobo.languageselector.ui.components.Title
 import vegabobo.languageselector.ui.components.edgeFade
 import vegabobo.languageselector.ui.screen.main.OperationMode
@@ -58,11 +57,12 @@ import vegabobo.languageselector.ui.theme.Ui
 
 @Composable
 fun AboutScreen(
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateToLibraries: () -> Unit
 ) {
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
-    val libraries = remember { Libs.Builder().withJson(context, R.raw.aboutlibraries).build().libraries }
+    val libraryCount = remember { Libs.Builder().withJson(context, R.raw.aboutlibraries).build().libraries.size }
     val appIcon by produceState<ImageBitmap?>(null) {
         value = withContext(Dispatchers.IO) {
             context.packageManager.getAppIcon(context.applicationInfo).toBitmap().asImageBitmap()
@@ -123,35 +123,15 @@ fun AboutScreen(
                 description = "github.com/MorpheApp/morphe-manager"
             ) { uriHandler.openUri("https://github.com/MorpheApp/morphe-manager") }
         }
-        item { Title(stringResource(R.string.deps_libs)) }
         item {
-            Column(
-                Modifier
-                    .clip(Ui.CardShape)
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-            ) {
-                libraries.forEachIndexed { index, library ->
-                    if (index > 0)
-                        HorizontalDivider(
-                            modifier = Modifier.padding(horizontal = Ui.CardPadding),
-                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)
-                        )
-                    val url = library.website.orEmpty()
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .clickable(enabled = url.isNotEmpty()) { uriHandler.openUri(url) }
-                            .padding(horizontal = Ui.CardPadding, vertical = 12.dp)
-                    ) {
-                        Text(text = library.name, style = MaterialTheme.typography.bodyLarge)
-                        Text(
-                            text = library.licenses.joinToString { it.name },
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
+            LinkItem(
+                icon = Icons.AutoMirrored.Outlined.LibraryBooks,
+                title = stringResource(R.string.deps_libs),
+                description = stringResource(R.string.open_source_licenses),
+                count = libraryCount,
+                trailing = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                onClick = navigateToLibraries
+            )
         }
     }
 }
@@ -161,6 +141,8 @@ private fun LinkItem(
     icon: ImageVector,
     title: String,
     description: String,
+    count: Int? = null,
+    trailing: ImageVector = Icons.AutoMirrored.Outlined.OpenInNew,
     onClick: () -> Unit
 ) {
     ListCard(onClick = onClick) {
@@ -180,8 +162,14 @@ private fun LinkItem(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+        if (count != null)
+            TextLabel(
+                text = count.toString(),
+                container = MaterialTheme.colorScheme.secondaryContainer,
+                content = MaterialTheme.colorScheme.onSecondaryContainer
+            )
         Icon(
-            imageVector = Icons.AutoMirrored.Outlined.OpenInNew,
+            imageVector = trailing,
             contentDescription = null,
             modifier = Modifier.size(20.dp),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
