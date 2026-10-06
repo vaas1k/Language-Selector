@@ -26,4 +26,26 @@ data class AppInfoState(
     val listOfPinnedLanguages: List<SingleLocale> = emptyList(),
     val selectedLanguage: Int = -1,
     val listOfAllLanguages: List<LocaleRegion> = emptyList(),
+    val searchQuery: String = "",
+    val searchResults: List<SingleLocale> = emptyList(),
 )
+
+data class LocaleSearchEntry(val locale: SingleLocale, val key: String)
+
+fun List<LocaleRegion>.toSearchIndex(uiLocale: Locale): List<LocaleSearchEntry> =
+    flatMap { region ->
+        region.locales.map {
+            val key = listOf(region.language, it.name, it.languageTag, it.toLocale().getDisplayName(uiLocale))
+                .joinToString("\n")
+                .lowercase()
+            LocaleSearchEntry(it, key)
+        }
+    }
+
+fun List<LocaleSearchEntry>.search(query: String): List<SingleLocale> {
+    val q = query.trim().replace('_', '-').lowercase()
+    if (q.isEmpty()) return emptyList()
+    return filter { q in it.key }
+        .sortedBy { !it.key.startsWith(q) && !it.key.contains("\n$q") }
+        .map { it.locale }
+}

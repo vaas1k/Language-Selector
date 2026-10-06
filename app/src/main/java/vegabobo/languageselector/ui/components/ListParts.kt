@@ -7,6 +7,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -64,20 +70,56 @@ fun ListCard(
 }
 
 @Composable
-fun LeadingBox(text: String) {
+fun HeaderCard(icon: ImageBitmap?, title: String, subtitle: String, label: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surfaceContainer, Ui.CardShape)
+            .padding(Ui.CardPadding),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(Ui.CardPadding)
+    ) {
+        if (icon != null)
+            Image(modifier = Modifier.size(Ui.HeaderIconSize), bitmap = icon, contentDescription = null)
+        else
+            Spacer(Modifier.size(Ui.HeaderIconSize))
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Box(Modifier.padding(top = 4.dp)) {
+                TextLabel(
+                    text = label,
+                    container = MaterialTheme.colorScheme.primaryContainer,
+                    content = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun LeadingBox(content: @Composable () -> Unit) {
     Box(
         Modifier
             .size(Ui.IconSize)
             .background(MaterialTheme.colorScheme.secondaryContainer, Ui.IconShape),
         contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            maxLines = 1
-        )
-    }
+    ) { content() }
 }
 
 fun Modifier.edgeFade(state: LazyListState, color: Color, top: Dp = 0.dp): Modifier =

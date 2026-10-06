@@ -1,37 +1,67 @@
 package vegabobo.languageselector.ui.components
 
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
 fun LocaleItemList(
     itemText: String,
-    onLongClick: () -> Unit = {},
+    modifier: Modifier = Modifier,
+    code: String? = null,
+    subtitle: String? = null,
+    hasChildren: Boolean = false,
+    onLongClick: (() -> Unit)? = null,
     onClick: () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .combinedClickable(
-                onClick = { onClick() },
-                onLongClick = { onLongClick() }
+    ListCard(modifier = modifier, onLongClick = onLongClick, onClick = onClick) {
+        LeadingBox {
+            if (code != null)
+                Text(
+                    text = code,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    maxLines = 1
+                )
+            else
+                Icon(
+                    imageVector = Icons.Outlined.Language,
+                    contentDescription = null,
+                    modifier = Modifier.size(22.dp),
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+        }
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = itemText,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
-            .fillMaxWidth()
-            .height(72.dp)
-            .padding(18.dp)
-    ) {
-        Text(
-            modifier = Modifier.align(Alignment.CenterStart),
-            text = itemText,
-            fontSize = 19.sp
-        )
+            if (subtitle != null)
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+        }
+        if (hasChildren)
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
     }
 }
+
+fun languageCode(tag: String): String = tag.substringBefore('-').uppercase()
