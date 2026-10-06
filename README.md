@@ -11,26 +11,6 @@ Set a different language for any app on Android 13+, the same way the system "Ap
 <img src="docs/screenshots/en/4-search.png" alt="Search" width="200"/>
 </div>
 
-### Before / after
-
-Original 1.04 (left) and this fork 1.05 (right), same phone, same input.
-
-Cold start. Both draw the first frame in about 0.1 s; the fork shows the root/Shizuku status while loading and lists modified apps first.
-
-<img src="docs/media/compare-startup.gif" alt="Cold start" width="480"/>
-
-Six fast flings. 99th percentile frame time: 200 ms in the original, 10 ms in the fork (dumpsys gfxinfo).
-
-<img src="docs/media/compare-scroll.gif" alt="Fast scrolling" width="480"/>
-
-Typing "ban": the original filters the list about 2.4 s later, the fork on the same frame.
-
-<img src="docs/media/compare-search.gif" alt="Search" width="480"/>
-
-App screen: the fork adds pinned languages and a Restart button.
-
-<img src="docs/media/compare-app-screen.gif" alt="App language screen" width="480"/>
-
 ### How it works
 
 Android 13+ can give every app its own language, separate from the system one. The system service `LocaleManagerService` stores that setting, but changing it for another app needs shell or root privileges (`cmd locale set-app-locales`). Stock Android exposes it in Settings; some ROMs (MIUI/HyperOS and others) hide the entry or do not ship it at all.
