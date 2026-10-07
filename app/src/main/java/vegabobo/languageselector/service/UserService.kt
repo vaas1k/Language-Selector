@@ -33,7 +33,8 @@ class UserService : IUserService.Stub() {
         if (Build.VERSION.SDK_INT < 34)
             localeManager.setApplicationLocales(packageName, currentUserId(), locales)
         else
-            localeManager.setApplicationLocales(packageName, currentUserId(), locales, true)
+            // fromDelegate=true locales are dropped on app update if missing from its LocaleConfig
+            localeManager.setApplicationLocales(packageName, currentUserId(), locales, false)
     }
 
     override fun getApplicationLocales(packageName: String?): LocaleList {

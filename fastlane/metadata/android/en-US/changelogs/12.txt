@@ -1,0 +1,1 @@
+- Language set for an app is no longer reset after that app is updated

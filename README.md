@@ -35,6 +35,8 @@ Language Selector is a front end for that one system call:
   `D0:8A:A0:A2:9B:A8:DB:44:E9:97:9A:75:1A:F2:1F:92:A3:38:19:55:DB:5E:69:F2:7E:EF:34:CA:83:CC:01:87`
 - **Obtainium.** In [Obtainium](https://github.com/ImranR98/Obtainium) add `https://github.com/vaas1k/Language-Selector` as an app source; updates follow release tags.
 
+Google Play Protect may warn about this APK, because it is installed outside Google Play from a developer it does not know, and the app uses privileged APIs (root/Shizuku), which also triggers warnings. To verify the file, compare the APK's SHA-256 with `SHA256SUMS` in the release, check the signing certificate SHA-256 above and the VirusTotal link in the release notes. Then choose "Install anyway".
+
 You can also [build it yourself](#building). The package id is `dev.vaas1k.languageselector`, so it installs next to the upstream app, not over it.
 
 ### Setup
